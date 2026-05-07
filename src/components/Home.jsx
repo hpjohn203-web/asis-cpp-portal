@@ -4,7 +4,7 @@ import { FLASHCARDS } from '../data/flashcards.js';
 import { GLOSSARY } from '../data/glossary.js';
 import { useProgress } from '../hooks/useProgress';
 
-const TOTAL_CONTENT = FLASHCARDS.length + questions.length;
+const TOTAL_CONTENT = questions.length;
 
 const HOW_TO_ITEMS = [
   { icon: '🃏', title: 'Flashcards', desc: '1,000 tactical medicine flashcards covering all CTAC-P domains. Spaced repetition ensures cards you struggle with come back sooner.' },
