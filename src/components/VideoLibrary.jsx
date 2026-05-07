@@ -12,14 +12,14 @@ export default function VideoLibrary({ onNavigate }) {
   const [search, setSearch] = useState('');
   const [activeGroup, setActiveGroup] = useState(null);
   const [activeVideo, setActiveVideo] = useState(null);
-  const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('cp_watched_videos') || '{}'));
+  const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('ctacp_watched_videos') || '{}'));
 
   function markWatched(url) {
     const id = getYouTubeId(url);
     if (!id) return;
     const next = { ...watched, [id]: true };
     setWatched(next);
-    localStorage.setItem('cp_watched_videos', JSON.stringify(next));
+    localStorage.setItem('ctacp_watched_videos', JSON.stringify(next));
   }
 
   const filtered = VIDEO_LIBRARY.map(group => ({

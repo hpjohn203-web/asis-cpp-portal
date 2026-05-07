@@ -1,527 +1,671 @@
-// Inline SVG/HTML diagram components — no external images needed
+import React from 'react';
 
-export function CourtHierarchy() {
-  const courts = [
-    { name: 'U.S. Supreme Court', sub: '9 Justices · Final authority on federal law', color: '#f59e0b', w: '70%' },
-    { name: 'U.S. Courts of Appeals', sub: '13 Circuits · Reviews district court decisions', color: '#60a5fa', w: '80%' },
-    { name: 'U.S. District Courts', sub: '94 Districts · Trial courts of general federal jurisdiction', color: '#34d399', w: '90%' },
-  ];
+const Box = ({ x, y, w, h, fill = '#1e3a5f', stroke = '#3b82f6', rx = 6, children }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={rx} fill={fill} stroke={stroke} strokeWidth="1.5" />
+    {children}
+  </g>
+);
+
+const Label = ({ x, y, text, size = 11, fill = '#f1f5f9', bold = false, anchor = 'middle' }) => (
+  <text x={x} y={y} textAnchor={anchor} fontSize={size} fill={fill} fontWeight={bold ? 'bold' : 'normal'} fontFamily="system-ui,sans-serif">{text}</text>
+);
+
+const Arrow = ({ x1, y1, x2, y2, color = '#64748b' }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth="2" markerEnd="url(#arr)" />
+);
+
+const Defs = () => (
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b" />
+    </marker>
+  </defs>
+);
+
+export function TECCPhases() {
   return (
-    <div className="p-2 space-y-2">
-      {courts.map((c, i) => (
-        <div key={i} className="mx-auto" style={{ width: c.w }}>
-          <div className="rounded-xl p-3 text-center border" style={{ borderColor: c.color + '60', background: c.color + '18' }}>
-            <p className="font-bold text-sm text-slate-100">{c.name}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{c.sub}</p>
-          </div>
-          {i < courts.length - 1 && (
-            <div className="flex justify-center mt-1">
-              <div className="w-px h-3 bg-slate-600" />
-            </div>
-          )}
-        </div>
-      ))}
-      <div className="mt-4 pt-3 border-t border-slate-700">
-        <p className="text-[10px] text-slate-500 text-center mb-2">State Court Integration</p>
-        <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-          <div className="bg-slate-700/40 rounded-lg p-2"><span className="text-amber-400 font-semibold">Federal Q:</span> Cases involving federal law, U.S. Constitution, or diversity jurisdiction (&gt;$75k)</div>
-          <div className="bg-slate-700/40 rounded-lg p-2"><span className="text-emerald-400 font-semibold">State courts:</span> Most civil & criminal cases. State supreme court → SCOTUS only on federal questions.</div>
-        </div>
-      </div>
-    </div>
+    <svg viewBox="0 0 520 280" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="280" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="TECC Phases of Care" size={14} bold fill="#f59e0b" />
+      {/* Hot Zone */}
+      <Box x={20} y={40} w={150} h={200} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={95} y={60} text="HOT ZONE" size={12} bold fill="#fca5a5" />
+        <Label x={95} y={80} text="Direct Threat Care" size={10} fill="#fca5a5" />
+        <rect x={35} y={90} width={120} height={1} fill="#ef4444" opacity="0.5" />
+        <Label x={95} y={110} text="● Tourniquet" size={10} fill="#fef2f2" />
+        <Label x={95} y={128} text="● Move to cover" size={10} fill="#fef2f2" />
+        <Label x={95} y={146} text="● Return fire" size={10} fill="#fef2f2" />
+        <Label x={95} y={164} text="● Self-aid if able" size={10} fill="#fef2f2" />
+        <Label x={95} y={220} text="Active fire" size={10} fill="#fca5a5" />
+      </Box>
+      {/* Warm Zone */}
+      <Box x={185} y={40} w={150} h={200} fill="#1c3520" stroke="#22c55e">
+        <Label x={260} y={60} text="WARM ZONE" size={12} bold fill="#86efac" />
+        <Label x={260} y={80} text="Indirect Threat Care" size={10} fill="#86efac" />
+        <rect x={200} y={90} width={120} height={1} fill="#22c55e" opacity="0.5" />
+        <Label x={260} y={110} text="● MARCH-PAWS" size={10} fill="#f0fdf4" />
+        <Label x={260} y={128} text="● Airway" size={10} fill="#f0fdf4" />
+        <Label x={260} y={146} text="● IV/IO access" size={10} fill="#f0fdf4" />
+        <Label x={260} y={164} text="● TXA within 3h" size={10} fill="#f0fdf4" />
+        <Label x={260} y={182} text="● Hypothermia prev." size={10} fill="#f0fdf4" />
+        <Label x={260} y={220} text="Potential threat" size={10} fill="#86efac" />
+      </Box>
+      {/* Cold Zone */}
+      <Box x={350} y={40} w={150} h={200} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={425} y={60} text="COLD ZONE" size={12} bold fill="#93c5fd" />
+        <Label x={425} y={80} text="Evacuation Care" size={10} fill="#93c5fd" />
+        <rect x={365} y={90} width={120} height={1} fill="#3b82f6" opacity="0.5" />
+        <Label x={425} y={110} text="● Monitor & reassess" size={10} fill="#eff6ff" />
+        <Label x={425} y={128} text="● Definitive care" size={10} fill="#eff6ff" />
+        <Label x={425} y={146} text="● Ventilator mgmt" size={10} fill="#eff6ff" />
+        <Label x={425} y={164} text="● Prolonged PFC" size={10} fill="#eff6ff" />
+        <Label x={425} y={182} text="● MIST handoff" size={10} fill="#eff6ff" />
+        <Label x={425} y={220} text="Scene secured" size={10} fill="#93c5fd" />
+      </Box>
+      <Arrow x1={170} y1={140} x2={183} y2={140} color="#f59e0b" />
+      <Arrow x1={335} y1={140} x2={348} y2={140} color="#f59e0b" />
+      <Label x={260} y={265} text="Patient flow: Hot → Warm → Cold Zone" size={10} fill="#94a3b8" />
+    </svg>
   );
 }
 
-export function CivilLitigationFlow() {
+export function MARCHPaws() {
   const steps = [
-    { name: 'Complaint Filed', desc: 'Plaintiff files complaint + summons served on defendant', color: '#f59e0b' },
-    { name: 'Answer / Motions', desc: 'Defendant responds; parties may file Rule 12 motions', color: '#60a5fa' },
-    { name: 'Discovery', desc: 'Interrogatories, depositions, document requests, RFAs', color: '#a78bfa' },
-    { name: 'Pre-Trial Motions', desc: 'Summary judgment, motions in limine, case management', color: '#f97316' },
-    { name: 'Trial', desc: 'Jury selection → opening → evidence → closing → verdict', color: '#34d399' },
-    { name: 'Judgment & Appeal', desc: 'Post-trial motions → appeal to circuit court if needed', color: '#fb7185' },
+    { letter: 'M', label: 'Massive Hemorrhage', detail: 'Tourniquets, wound packing', color: '#dc2626', bg: '#7f1d1d' },
+    { letter: 'A', label: 'Airway', detail: 'NPA, cricothyrotomy', color: '#ea580c', bg: '#7c2d12' },
+    { letter: 'R', label: 'Respiration', detail: 'Chest seal, needle decompression', color: '#ca8a04', bg: '#713f12' },
+    { letter: 'C', label: 'Circulation', detail: 'IV/IO, fluids, blood', color: '#16a34a', bg: '#14532d' },
+    { letter: 'H', label: 'Hypothermia', detail: 'Blankets, warm fluids', color: '#0891b2', bg: '#164e63' },
+    { letter: 'P', label: 'Pain', detail: 'Ketamine, OTFC, meloxicam', color: '#7c3aed', bg: '#3b0764' },
+    { letter: 'A', label: 'Antibiotics', detail: 'Moxifloxacin / ertapenem', color: '#be185d', bg: '#500724' },
+    { letter: 'W', label: 'Wounds', detail: 'Dressing, irrigation', color: '#0369a1', bg: '#0c4a6e' },
+    { letter: 'S', label: 'Splinting', detail: 'Fracture stabilization', color: '#047857', bg: '#022c22' },
   ];
   return (
-    <div className="p-2 space-y-2">
-      {steps.map((s, i) => (
-        <div key={i} className="flex items-start gap-2">
-          <div className="shrink-0 flex flex-col items-center">
-            <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-slate-900" style={{ backgroundColor: s.color }}>
-              {i + 1}
-            </div>
-            {i < steps.length - 1 && <div className="w-px h-4 mt-0.5" style={{ backgroundColor: s.color + '60' }} />}
-          </div>
-          <div className="pb-1">
-            <p className="text-sm font-semibold text-slate-100">{s.name}</p>
-            <p className="text-xs text-slate-400">{s.desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function ContractElements() {
-  const elements = [
-    { name: 'Offer', icon: '📋', color: '#f59e0b', points: ['Clear & definite terms', 'Communicated to offeree', 'Intent to be bound'] },
-    { name: 'Acceptance', icon: '✅', color: '#34d399', points: ['Mirror image rule (common law)', 'UCC: Battle of the forms', 'Must be communicated'] },
-    { name: 'Consideration', icon: '⚖️', color: '#60a5fa', points: ['Bargained-for exchange', 'Legal detriment or benefit', 'Must be adequate (not nominal)'] },
-    { name: 'Capacity & Legality', icon: '🛡️', color: '#a78bfa', points: ['Legal age & mental capacity', 'Legal subject matter', 'Not against public policy'] },
-  ];
-  return (
-    <div className="p-2">
-      <div className="grid grid-cols-2 gap-2 mb-3">
-        {elements.map((el, i) => (
-          <div key={i} className="rounded-xl p-3 border" style={{ borderColor: el.color + '50', background: el.color + '12' }}>
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-base">{el.icon}</span>
-              <span className="text-sm font-bold text-slate-100">{el.name}</span>
-            </div>
-            <ul className="space-y-0.5">
-              {el.points.map((p, j) => <li key={j} className="text-[10px] text-slate-400">• {p}</li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="bg-amber-500/15 border border-amber-500/30 rounded-xl p-3 text-center">
-        <p className="text-xs font-bold text-amber-300">All 4 elements required = Enforceable Contract</p>
-        <p className="text-[10px] text-slate-400 mt-0.5">Missing any element → contract void or voidable</p>
-      </div>
-    </div>
-  );
-}
-
-export function NegligenceElements() {
-  const steps = [
-    { name: 'Duty', color: '#f59e0b', desc: 'Defendant owed plaintiff a duty of reasonable care', note: 'Reasonable person standard' },
-    { name: 'Breach', color: '#f97316', desc: 'Defendant failed to meet that standard of care', note: 'Res ipsa loquitur can help establish' },
-    { name: 'Causation', color: '#a78bfa', desc: 'Breach caused the harm (actual + proximate)', note: 'But-for test + foreseeability' },
-    { name: 'Damages', color: '#34d399', desc: 'Plaintiff suffered actual compensable harm', note: 'Compensatory, punitive, nominal' },
-  ];
-  return (
-    <div className="p-2 space-y-3">
-      {steps.map((s, i) => (
-        <div key={i} className="flex items-start gap-3">
-          <div className="shrink-0">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-slate-900 text-sm" style={{ backgroundColor: s.color }}>
-              {i + 1}
-            </div>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-sm text-slate-100">{s.name}</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-400">{s.note}</span>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">{s.desc}</p>
-          </div>
-        </div>
-      ))}
-      <div className="mt-2 pt-2 border-t border-slate-700 flex gap-2 flex-wrap">
-        <span className="text-[10px] bg-slate-700 text-slate-300 px-2 py-1 rounded-full">Defenses: Contributory negligence</span>
-        <span className="text-[10px] bg-slate-700 text-slate-300 px-2 py-1 rounded-full">Comparative fault</span>
-        <span className="text-[10px] bg-slate-700 text-slate-300 px-2 py-1 rounded-full">Assumption of risk</span>
-      </div>
-    </div>
-  );
-}
-
-export function BillOfRights() {
-  const amendments = [
-    { num: '1st', desc: 'Speech, religion, press, assembly, petition', color: '#f59e0b' },
-    { num: '2nd', desc: 'Right to keep and bear arms', color: '#f97316' },
-    { num: '4th', desc: 'Protection from unreasonable search & seizure', color: '#60a5fa' },
-    { num: '5th', desc: 'Grand jury, double jeopardy, self-incrimination, due process', color: '#a78bfa' },
-    { num: '6th', desc: 'Speedy trial, jury, counsel, confrontation', color: '#34d399' },
-    { num: '8th', desc: 'No cruel & unusual punishment or excessive bail', color: '#fb7185' },
-    { num: '14th', desc: 'Due process + equal protection; incorporates Bill of Rights to states', color: '#fbbf24' },
-  ];
-  return (
-    <div className="p-2 space-y-2">
-      {amendments.map((a, i) => (
-        <div key={i} className="flex items-start gap-2">
-          <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-slate-900" style={{ backgroundColor: a.color }}>
-            {a.num}
-          </div>
-          <p className="text-xs text-slate-300 leading-relaxed pt-1">{a.desc}</p>
-        </div>
-      ))}
-      <p className="text-[10px] text-slate-500 pt-2">3rd, 7th, 9th, 10th amendments omitted for brevity. 14th Amendment incorporation doctrine applies most of BOR to states.</p>
-    </div>
-  );
-}
-
-export function BusinessEntities() {
-  const cols = ['Feature', 'Sole Prop.', 'Partnership', 'LLC', 'Corporation'];
-  const rows = [
-    ['Liability', 'Unlimited personal', 'Joint & several', 'Limited', 'Limited'],
-    ['Taxation', 'Pass-through', 'Pass-through', 'Flexible', 'Double (C-corp)'],
-    ['Formation', 'None required', 'Agreement', 'Articles + Op. Agmt', 'Articles + Bylaws'],
-    ['Management', 'Owner', 'Partners', 'Members/Mgrs', 'Board/Officers'],
-    ['Continuity', 'Ends at death', 'May dissolve', 'Perpetual', 'Perpetual'],
-  ];
-  const colors = ['#94a3b8', '#f59e0b', '#60a5fa', '#34d399', '#a78bfa'];
-  return (
-    <div className="p-1 overflow-x-auto">
-      <table className="w-full text-[10px] border-collapse">
-        <thead>
-          <tr>
-            {cols.map((c, i) => (
-              <th key={i} className="px-2 py-1.5 text-left font-bold" style={{ color: colors[i] }}>{c}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i} className={i % 2 === 0 ? 'bg-slate-800/40' : ''}>
-              {row.map((cell, j) => (
-                <td key={j} className={`px-2 py-1.5 text-xs ${j === 0 ? 'font-semibold text-slate-300' : 'text-slate-400'}`}>{cell}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export function PropertyOwnership() {
-  const estates = [
-    { name: 'Fee Simple Absolute', color: '#34d399', duration: 'Infinite', transferable: 'Yes — freely', defeasible: 'No conditions', note: 'Strongest ownership interest' },
-    { name: 'Fee Simple Defeasible', color: '#f59e0b', duration: 'Until condition', transferable: 'Yes, with condition', defeasible: 'Yes — determinable or on condition subsequent', note: 'Includes future interests' },
-    { name: 'Life Estate', color: '#60a5fa', duration: 'Measuring life', transferable: 'Only for duration of life', defeasible: 'No', note: 'Followed by remainder or reversion' },
-  ];
-  return (
-    <div className="p-2 space-y-3">
-      {estates.map((e, i) => (
-        <div key={i} className="rounded-xl p-3 border" style={{ borderColor: e.color + '50', background: e.color + '12' }}>
-          <p className="font-bold text-sm mb-2" style={{ color: e.color }}>{e.name}</p>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px]">
-            <div><span className="text-slate-500">Duration: </span><span className="text-slate-300">{e.duration}</span></div>
-            <div><span className="text-slate-500">Transfer: </span><span className="text-slate-300">{e.transferable}</span></div>
-            <div className="col-span-2"><span className="text-slate-500">Defeasible: </span><span className="text-slate-300">{e.defeasible}</span></div>
-            <div className="col-span-2 mt-0.5 text-slate-400 italic">{e.note}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function ProfResponsibility() {
-  const duties = [
-    { name: 'Competence', rule: 'Rule 1.1', desc: 'Legal knowledge, skill, thoroughness required for representation', color: '#f59e0b' },
-    { name: 'Confidentiality', rule: 'Rule 1.6', desc: 'Cannot reveal client info without informed consent; exceptions for crime/fraud prevention', color: '#60a5fa' },
-    { name: 'Conflict of Interest', rule: 'Rule 1.7', desc: 'Cannot represent adverse interests without written consent; must analyze concurrent conflicts', color: '#f97316' },
-    { name: 'Communication', rule: 'Rule 1.4', desc: 'Keep client reasonably informed; promptly respond to requests for information', color: '#a78bfa' },
-    { name: 'Supervision of Paralegals', rule: 'Rule 5.3', desc: 'Supervising attorney is responsible for paralegal conduct; must ensure compliance with Rules', color: '#34d399' },
-    { name: 'No Unauthorized Practice', rule: 'Rule 5.5', desc: 'Paralegals cannot give legal advice, represent clients in court, or set fees without supervision', color: '#fb7185' },
-  ];
-  return (
-    <div className="p-2 space-y-2">
-      {duties.map((d, i) => (
-        <div key={i} className="flex items-start gap-2">
-          <div className="shrink-0 mt-0.5">
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md text-slate-900" style={{ backgroundColor: d.color }}>{d.rule}</span>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-100">{d.name}</p>
-            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{d.desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function HearsayExceptions() {
-  const exceptions = [
-    { rule: 'FRE 803(1)', name: 'Present Sense Impression', desc: 'Statement made while perceiving an event or immediately after', avail: 'Declarant available' },
-    { rule: 'FRE 803(2)', name: 'Excited Utterance', desc: 'Statement relating to startling event while under stress of excitement', avail: 'Declarant available' },
-    { rule: 'FRE 803(3)', name: 'State of Mind', desc: "Declarant's then-existing mental, emotional, or physical condition", avail: 'Declarant available' },
-    { rule: 'FRE 803(6)', name: 'Business Records', desc: 'Records of regularly conducted business activity, made at or near time of event', avail: 'Declarant available' },
-    { rule: 'FRE 804(b)(2)', name: 'Dying Declaration', desc: 'Statement by declarant believing death imminent about cause/circumstances', avail: 'Declarant unavailable' },
-    { rule: 'FRE 804(b)(3)', name: 'Statement Against Interest', desc: 'Statement so contrary to interest that reasonable person would not make it without believing it true', avail: 'Declarant unavailable' },
-    { rule: 'FRE 807', name: 'Residual Exception', desc: 'Trustworthy statement not covered by other exceptions; advance notice required', avail: 'Either' },
-  ];
-  return (
-    <div className="p-2 space-y-1.5">
-      <div className="flex gap-3 mb-2 text-[10px]">
-        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400 inline-block" /> Declarant available</span>
-        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> Declarant unavailable</span>
-        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400 inline-block" /> Either</span>
-      </div>
-      {exceptions.map((e, i) => {
-        const dot = e.avail === 'Declarant available' ? '#f59e0b' : e.avail === 'Declarant unavailable' ? '#60a5fa' : '#a78bfa';
+    <svg viewBox="0 0 520 310" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="310" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="MARCH-PAWS Algorithm" size={14} bold fill="#f59e0b" />
+      {steps.map((s, i) => {
+        const col = i < 5 ? 0 : 1;
+        const row = i < 5 ? i : i - 5;
+        const x = col === 0 ? 15 : 270;
+        const y = 38 + row * 50;
         return (
-          <div key={i} className="flex items-start gap-2 bg-slate-800/50 rounded-lg p-2">
-            <div className="shrink-0 w-2 h-2 rounded-full mt-1.5" style={{ backgroundColor: dot }} />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] font-bold text-amber-400">{e.rule}</span>
-                <span className="text-xs font-semibold text-slate-200">{e.name}</span>
-              </div>
-              <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">{e.desc}</p>
-            </div>
-          </div>
+          <g key={i}>
+            <rect x={x} y={y} width={240} height={42} rx={5} fill={s.bg} stroke={s.color} strokeWidth="1.5" />
+            <rect x={x} y={y} width={36} height={42} rx={5} fill={s.color} />
+            <Label x={x + 18} y={y + 26} text={s.letter} size={16} bold fill="#fff" />
+            <Label x={x + 44} y={y + 16} text={s.label} size={11} bold fill="#f1f5f9" anchor="start" />
+            <Label x={x + 44} y={y + 31} text={s.detail} size={9} fill="#94a3b8" anchor="start" />
+          </g>
         );
       })}
-    </div>
+      <Label x={260} y={298} text="Priority order: life-threats first, then comfort/wound care" size={9} fill="#64748b" />
+    </svg>
   );
 }
 
-export function FourthAmendment() {
-  const nodes = [
-    { q: 'Was there government action?', yes: 'Continue ↓', no: 'No 4th Amendment issue', yesColor: '#34d399', noColor: '#94a3b8' },
-    { q: 'Did person have reasonable expectation of privacy?', yes: 'Continue ↓', no: 'No search — no warrant needed', yesColor: '#34d399', noColor: '#94a3b8' },
-    { q: 'Was there a valid warrant (or recognized exception)?', yes: 'Search is constitutional', no: 'Search is unconstitutional → Exclusionary Rule', yesColor: '#34d399', noColor: '#fb7185' },
-  ];
-  const exceptions = ['Search incident to arrest', 'Automobile exception', 'Plain view', 'Consent', 'Exigent circumstances', 'Terry stop/frisk (reasonable suspicion)', 'Inventory search', 'Border search'];
+export function RTFIntegration() {
   return (
-    <div className="p-2">
-      <div className="space-y-2 mb-3">
-        {nodes.map((n, i) => (
-          <div key={i}>
-            <div className="bg-slate-700/50 rounded-lg px-3 py-2 text-xs font-semibold text-slate-200 text-center">{n.q}</div>
-            <div className="flex gap-2 mt-1.5 justify-center">
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: n.yesColor + '25', color: n.yesColor }}>YES: {n.yes}</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: n.noColor + '25', color: n.noColor }}>NO: {n.no}</span>
-            </div>
-            {i < nodes.length - 1 && <div className="flex justify-center mt-1"><div className="w-px h-2 bg-slate-600" /></div>}
-          </div>
-        ))}
-      </div>
-      <div className="border-t border-slate-700 pt-2">
-        <p className="text-[10px] font-bold text-amber-400 mb-1.5">Warrant Exceptions:</p>
-        <div className="flex flex-wrap gap-1">
-          {exceptions.map((ex, i) => <span key={i} className="text-[10px] bg-slate-700/60 text-slate-300 px-1.5 py-0.5 rounded-full">{ex}</span>)}
-        </div>
-      </div>
-    </div>
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Rescue Task Force Integration" size={14} bold fill="#f59e0b" />
+      <Box x={10} y={38} w={120} h={50} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={70} y={57} text="ACTIVE THREAT" size={10} bold fill="#fca5a5" />
+        <Label x={70} y={73} text="Hot Zone" size={9} fill="#fca5a5" />
+      </Box>
+      <Box x={200} y={38} w={120} h={50} fill="#1c3520" stroke="#22c55e">
+        <Label x={260} y={57} text="RTF TEAM" size={10} bold fill="#86efac" />
+        <Label x={260} y={73} text="Warm Zone" size={9} fill="#86efac" />
+      </Box>
+      <Box x={390} y={38} w={120} h={50} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={450} y={57} text="STAGING" size={10} bold fill="#93c5fd" />
+        <Label x={450} y={73} text="Cold Zone" size={9} fill="#93c5fd" />
+      </Box>
+      <Arrow x1={130} y1={63} x2={198} y2={63} color="#f59e0b" />
+      <Arrow x1={320} y1={63} x2={388} y2={63} color="#f59e0b" />
+      <Box x={170} y={120} w={180} h={130} fill="#1e293b" stroke="#f59e0b">
+        <Label x={260} y={140} text="RTF COMPOSITION" size={11} bold fill="#f59e0b" />
+        <Label x={260} y={158} text="2-4 EMS providers" size={10} fill="#e2e8f0" />
+        <Label x={260} y={175} text="2+ LEO security escorts" size={10} fill="#e2e8f0" />
+        <Label x={260} y={192} text="Medical equipment" size={10} fill="#e2e8f0" />
+        <Label x={260} y={209} text="Rapid hemorrhage control" size={10} fill="#e2e8f0" />
+        <Label x={260} y={226} text="Tourniquet + chest seal" size={10} fill="#e2e8f0" />
+        <Label x={260} y={243} text="Airway management" size={10} fill="#e2e8f0" />
+      </Box>
+      <Label x={260} y={275} text="LEO secures 360° while EMS treats → extract to cold zone" size={10} fill="#94a3b8" />
+    </svg>
   );
 }
 
-export function ContractRemedies() {
-  const remedies = [
-    {
-      name: 'Expectation Damages', color: '#f59e0b', icon: '🎯',
-      goal: 'Put plaintiff in position had contract been performed',
-      includes: ['Lost profits', 'Cost of substitute performance', 'Consequential damages (if foreseeable)'],
-      limit: 'Must be proven with reasonable certainty',
-    },
-    {
-      name: 'Reliance Damages', color: '#60a5fa', icon: '🔄',
-      goal: 'Reimburse plaintiff for expenses incurred in reliance on the contract',
-      includes: ['Out-of-pocket costs', 'Preparatory expenditures', 'Used when lost profits are too speculative'],
-      limit: 'Cannot exceed expectation damages',
-    },
-    {
-      name: 'Restitution', color: '#34d399', icon: '↩️',
-      goal: 'Prevent unjust enrichment — recover benefit conferred on defendant',
-      includes: ['Value of goods or services rendered', 'Available even if no contract formed', 'Quantum meruit (as much as deserved)'],
-      limit: 'Measured by defendant\'s gain, not plaintiff\'s loss',
-    },
-    {
-      name: 'Specific Performance', color: '#a78bfa', icon: '⚖️',
-      goal: 'Equitable order to actually perform the contract',
-      includes: ['Unique goods or real estate only', 'Money damages must be inadequate', 'Court discretion required'],
-      limit: 'Not available for personal service contracts',
-    },
+export function TourniquetDecision() {
+  return (
+    <svg viewBox="0 0 520 310" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="310" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Hemorrhage Control Decision Tree" size={13} bold fill="#f59e0b" />
+      <Box x={180} y={35} w={160} h={40} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={260} y={60} text="Life-threatening bleeding?" size={11} bold fill="#fca5a5" />
+      </Box>
+      <Arrow x1={260} y1={75} x2={260} y2={100} />
+      <Box x={180} y={100} w={160} h={40} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={260} y={125} text="On a limb?" size={11} fill="#93c5fd" />
+      </Box>
+      <Arrow x1={180} y1={120} x2={100} y2={165} color="#22c55e" />
+      <Arrow x1={340} y1={120} x2={420} y2={165} color="#ef4444" />
+      <Label x={130} y={155} text="YES" size={10} fill="#22c55e" />
+      <Label x={390} y={155} text="NO" size={10} fill="#ef4444" />
+      <Box x={30} y={165} w={140} h={50} fill="#14532d" stroke="#22c55e">
+        <Label x={100} y={185} text="TOURNIQUET" size={11} bold fill="#86efac" />
+        <Label x={100} y={202} text="High & tight (CUF)" size={9} fill="#d1fae5" />
+      </Box>
+      <Box x={350} y={165} w={140} h={50} fill="#1c3520" stroke="#f59e0b">
+        <Label x={420} y={185} text="Junctional?" size={11} fill="#fde68a" />
+        <Label x={420} y={202} text="groin/axilla/neck" size={9} fill="#fde68a" />
+      </Box>
+      <Arrow x1={420} y1={215} x2={420} y2={245} />
+      <Box x={350} y={245} w={140} h={50} fill="#713f12" stroke="#f59e0b">
+        <Label x={420} y={265} text="Hemostatic pack" size={10} bold fill="#fde68a" />
+        <Label x={420} y={280} text="3 min pressure" size={9} fill="#fef3c7" />
+      </Box>
+      <Box x={30} y={245} w={140} h={50} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={100} y={263} text="Truncal bleed:" size={10} fill="#93c5fd" />
+        <Label x={100} y={279} text="Permissive hypotension" size={9} fill="#93c5fd" />
+        <Label x={100} y={293} text="+ blood products" size={9} fill="#93c5fd" />
+      </Box>
+    </svg>
+  );
+}
+
+export function DCRFlow() {
+  const steps = [
+    { label: 'Hemorrhage Control', sub: 'TQ + wound packing', color: '#dc2626' },
+    { label: 'TXA within 3 hours', sub: '1g IV over 10 min', color: '#ea580c' },
+    { label: 'Whole Blood / 1:1:1', sub: 'Preferred over crystalloids', color: '#ca8a04' },
+    { label: 'Permissive Hypotension', sub: 'SBP 80-90 (no TBI) | ≥110 (TBI)', color: '#16a34a' },
+    { label: 'Prevent Lethal Triad', sub: 'Keep warm, avoid cold NS', color: '#0891b2' },
   ];
   return (
-    <div className="p-2 space-y-2">
-      {remedies.map((r, i) => (
-        <div key={i} className="rounded-xl p-3 border" style={{ borderColor: r.color + '50', background: r.color + '10' }}>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span>{r.icon}</span>
-            <span className="text-sm font-bold" style={{ color: r.color }}>{r.name}</span>
-          </div>
-          <p className="text-[10px] text-slate-300 italic mb-1">{r.goal}</p>
-          <ul className="space-y-0.5 mb-1">
-            {r.includes.map((it, j) => <li key={j} className="text-[10px] text-slate-400">• {it}</li>)}
-          </ul>
-          <p className="text-[10px] text-amber-400/80">⚠ {r.limit}</p>
-        </div>
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Damage Control Resuscitation" size={13} bold fill="#f59e0b" />
+      {steps.map((s, i) => (
+        <g key={i}>
+          <rect x={50} y={38 + i * 46} width={420} height={38} rx={6} fill="#1e293b" stroke={s.color} strokeWidth="1.5" />
+          <rect x={50} y={38 + i * 46} width={8} height={38} rx={3} fill={s.color} />
+          <Label x={80} y={54 + i * 46} text={s.label} size={12} bold fill="#f1f5f9" anchor="start" />
+          <Label x={80} y={69 + i * 46} text={s.sub} size={10} fill="#94a3b8" anchor="start" />
+          {i < 4 && <Arrow x1={260} y1={76 + i * 46} x2={260} y2={86 + i * 46} color="#475569" />}
+        </g>
       ))}
-    </div>
+      <Label x={260} y={280} text="Goal: prevent hypothermia + acidosis + coagulopathy" size={10} fill="#64748b" />
+    </svg>
   );
 }
 
-export function IntentionalTorts() {
-  const torts = [
-    { name: 'Assault', elements: 'Act + Reasonable apprehension of imminent harmful/offensive contact', defense: 'Self-defense, consent', color: '#f97316' },
-    { name: 'Battery', elements: 'Intentional harmful/offensive contact with plaintiff\'s person', defense: 'Consent, self-defense, defense of others', color: '#fb7185' },
-    { name: 'False Imprisonment', elements: 'Intentional confinement within fixed boundaries + awareness', defense: 'Shopkeeper\'s privilege (reasonable grounds)', color: '#a78bfa' },
-    { name: 'IIED', elements: 'Extreme & outrageous conduct + intentional/reckless + severe emotional distress', defense: 'Defendant\'s status (public figures)', color: '#f59e0b' },
-    { name: 'Trespass to Land', elements: 'Intentional entry (physical or object) on land — no actual damages required', defense: 'Consent, necessity, legal authority', color: '#34d399' },
-    { name: 'Trespass to Chattels', elements: 'Intentional intermeddling causing actual harm or dispossession', defense: 'Consent, self-help recapture', color: '#60a5fa' },
-    { name: 'Conversion', elements: 'Intentional act so seriously interfering with chattel that forced sale is justified', defense: 'Consent, necessity', color: '#38bdf8' },
+export function LethalTriad() {
+  return (
+    <svg viewBox="0 0 520 300" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="300" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Lethal Triad of Trauma" size={14} bold fill="#f59e0b" />
+      <circle cx={260} cy={160} r={55} fill="#7f1d1d" stroke="#ef4444" strokeWidth="2" opacity="0.3" />
+      <Label x={260} y={155} text="UNCONTROLLED" size={10} bold fill="#ef4444" />
+      <Label x={260} y={170} text="HEMORRHAGE" size={10} bold fill="#ef4444" />
+      <Box x={10} y={50} w={150} h={70} fill="#1e1b4b" stroke="#818cf8">
+        <Label x={85} y={75} text="HYPOTHERMIA" size={12} bold fill="#a5b4fc" />
+        <Label x={85} y={93} text="Impairs clotting" size={10} fill="#c7d2fe" />
+        <Label x={85} y={108} text="enzyme function" size={10} fill="#c7d2fe" />
+      </Box>
+      <Box x={360} y={50} w={150} h={70} fill="#1a2e1a" stroke="#4ade80">
+        <Label x={435} y={75} text="COAGULOPATHY" size={11} bold fill="#86efac" />
+        <Label x={435} y={93} text="Dilutional from NS" size={10} fill="#bbf7d0" />
+        <Label x={435} y={108} text="Clotting fails" size={10} fill="#bbf7d0" />
+      </Box>
+      <Box x={185} y={210} w={150} h={70} fill="#1c1917" stroke="#f97316">
+        <Label x={260} y={235} text="ACIDOSIS" size={12} bold fill="#fdba74" />
+        <Label x={260} y={253} text="High Cl⁻ from NS" size={10} fill="#fed7aa" />
+        <Label x={260} y={268} text="Impairs coag. factors" size={10} fill="#fed7aa" />
+      </Box>
+      <line x1={160} y1={85} x2={205} y2={120} stroke="#818cf8" strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1={360} y1={85} x2={315} y2={120} stroke="#4ade80" strokeWidth="1.5" strokeDasharray="4,3" />
+      <line x1={260} y1={210} x2={260} y2={215} stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,3" />
+      <Label x={260} y={292} text="Broken by: warm blood products + hemorrhage control" size={10} fill="#94a3b8" />
+    </svg>
+  );
+}
+
+export function CrichotomySteps() {
+  const steps = [
+    { n: '1', t: 'Vertical skin incision', d: 'Over cricothyroid membrane' },
+    { n: '2', t: 'Palpate membrane', d: 'Identify CTM by feel' },
+    { n: '3', t: 'Horizontal stab', d: 'Through CTM — scalpel' },
+    { n: '4', t: 'Insert bougie', d: 'Feel rings + carina' },
+    { n: '5', t: 'Railroad 6.0mm ETT', d: 'Over bougie into trachea' },
+    { n: '6', t: 'Confirm placement', d: 'EtCO₂ + bilateral sounds' },
   ];
   return (
-    <div className="p-2 space-y-1.5">
-      {torts.map((t, i) => (
-        <div key={i} className="rounded-lg p-2 border-l-2 bg-slate-800/40" style={{ borderColor: t.color }}>
-          <p className="text-xs font-bold mb-0.5" style={{ color: t.color }}>{t.name}</p>
-          <p className="text-[10px] text-slate-300 leading-relaxed">{t.elements}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Defenses: {t.defense}</p>
-        </div>
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Surgical Cricothyrotomy Steps" size={13} bold fill="#f59e0b" />
+      {steps.map((s, i) => {
+        const col = i < 3 ? 0 : 1;
+        const row = i < 3 ? i : i - 3;
+        const x = col === 0 ? 15 : 270;
+        const y = 38 + row * 76;
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width={240} height={66} rx={6} fill="#1e293b" stroke="#0891b2" strokeWidth="1.5" />
+            <circle cx={x + 22} cy={y + 20} r={14} fill="#0891b2" />
+            <Label x={x + 22} y={y + 25} text={s.n} size={13} bold fill="#fff" />
+            <Label x={x + 45} y={y + 22} text={s.t} size={11} bold fill="#f1f5f9" anchor="start" />
+            <Label x={x + 45} y={y + 38} text={s.d} size={10} fill="#94a3b8" anchor="start" />
+          </g>
+        );
+      })}
+      <Box x={165} y={262} w={190} h={22} fill="#7f1d1d" stroke="#ef4444" rx={4}>
+        <Label x={260} y={278} text="FALSE AIRWAY: massive SQ emphysema → remove + retry" size={9} fill="#fca5a5" />
+      </Box>
+    </svg>
+  );
+}
+
+export function TensionPneumo() {
+  return (
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Tension Pneumothorax Progression" size={13} bold fill="#f59e0b" />
+      {[
+        { x: 15, label: 'Penetrating', sub: 'Chest wound', color: '#dc2626' },
+        { x: 125, label: 'Air traps', sub: 'in pleural space', color: '#ea580c' },
+        { x: 235, label: 'Lung collapse', sub: 'Right side', color: '#ca8a04' },
+        { x: 345, label: 'Mediastinal', sub: 'shift left', color: '#7c3aed' },
+        { x: 455, label: 'Obstructive', sub: 'shock / arrest', color: '#dc2626' },
+      ].map((s, i) => (
+        <g key={i}>
+          <rect x={s.x} y={40} width={100} height={60} rx={6} fill="#1e293b" stroke={s.color} strokeWidth="1.5" />
+          <Label x={s.x + 50} y={68} text={s.label} size={10} bold fill={s.color} />
+          <Label x={s.x + 50} y={84} text={s.sub} size={9} fill="#94a3b8" />
+          {i < 4 && <Arrow x1={s.x + 100} y1={70} x2={s.x + 123} y2={70} color="#475569" />}
+        </g>
       ))}
-    </div>
+      <Label x={260} y={130} text="Clinical Signs:" size={12} bold fill="#f59e0b" />
+      <rect x={80} y={140} width={360} height={90} rx={6} fill="#1e293b" stroke="#475569" />
+      {[
+        'Absent breath sounds (ipsilateral side)',
+        'Tracheal deviation (contralateral)',
+        'Jugular venous distention (JVD)',
+        'Hypotension + tachycardia',
+      ].map((t, i) => <Label key={i} x={100} y={162 + i * 18} text={'• ' + t} size={10} fill="#e2e8f0" anchor="start" />)}
+      <Label x={260} y={255} text="Treatment: 14g needle → 2nd ICS MCL or 4th/5th ICS AAL" size={11} bold fill="#22c55e" />
+      <Label x={260} y={273} text="Worsening after vented chest seal → needle decompression" size={10} fill="#86efac" />
+    </svg>
   );
 }
 
-export function RecordingActs() {
-  const acts = [
-    {
-      name: 'Race Statute', color: '#34d399',
-      rule: 'First to record wins — regardless of notice',
-      winner: 'Whoever records first',
-      notice: 'Irrelevant',
-      states: 'NC, LA (rare)',
-    },
-    {
-      name: 'Notice Statute', color: '#60a5fa',
-      rule: 'Subsequent purchaser wins if they took without notice of prior conveyance',
-      winner: 'Subsequent BFP without notice (even if not yet recorded)',
-      notice: 'Must take without actual/constructive notice',
-      states: 'CA, FL, TX (most common)',
-    },
-    {
-      name: 'Race-Notice Statute', color: '#a78bfa',
-      rule: 'Subsequent purchaser must BOTH record first AND take without notice',
-      winner: 'First to record AND took without notice',
-      notice: 'Must take without notice AND record first',
-      states: 'NY, MA, IL (very common)',
-    },
+export function BlastInjuryTypes() {
+  const types = [
+    { label: 'PRIMARY', sub: 'Overpressure wave', organs: 'Blast lung, TM rupture,\nGI barotrauma', color: '#dc2626', bg: '#7f1d1d' },
+    { label: 'SECONDARY', sub: 'Debris / shrapnel', organs: 'Penetrating fragment\nwounds', color: '#ea580c', bg: '#7c2d12' },
+    { label: 'TERTIARY', sub: 'Casualty thrown', organs: 'Blunt trauma, fractures,\ntraumatic amputation', color: '#ca8a04', bg: '#713f12' },
+    { label: 'QUATERNARY', sub: 'All other effects', organs: 'Burns, inhalation,\ncrush injury', color: '#7c3aed', bg: '#3b0764' },
   ];
   return (
-    <div className="p-2 space-y-2">
-      {acts.map((a, i) => (
-        <div key={i} className="rounded-xl p-3 border" style={{ borderColor: a.color + '50', background: a.color + '10' }}>
-          <p className="font-bold text-sm mb-1.5" style={{ color: a.color }}>{a.name}</p>
-          <p className="text-xs text-slate-200 mb-1.5 leading-relaxed">{a.rule}</p>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[10px]">
-            <div><span className="text-slate-500">Winner: </span><span className="text-slate-300">{a.winner}</span></div>
-            <div><span className="text-slate-500">Notice: </span><span className="text-slate-300">{a.notice}</span></div>
-            <div className="col-span-2"><span className="text-slate-500">Example states: </span><span className="text-slate-300">{a.states}</span></div>
-          </div>
-        </div>
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Blast Injury Classification" size={14} bold fill="#f59e0b" />
+      {types.map((t, i) => {
+        const x = (i % 2) * 258 + 12;
+        const y = Math.floor(i / 2) * 120 + 38;
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width={240} height={108} rx={6} fill={t.bg} stroke={t.color} strokeWidth="1.5" />
+            <Label x={x + 120} y={y + 22} text={t.label} size={13} bold fill={t.color} />
+            <Label x={x + 120} y={y + 40} text={t.sub} size={10} fill="#f1f5f9" />
+            <rect x={x + 10} y={y + 48} width={220} height={1} fill={t.color} opacity="0.4" />
+            {t.organs.split('\n').map((l, j) => <Label key={j} x={x + 120} y={y + 66 + j * 18} text={l} size={10} fill="#cbd5e1" />)}
+          </g>
+        );
+      })}
+      <Label x={260} y={282} text="KE = ½mv²  — velocity is the dominant factor for cavitation damage" size={10} fill="#64748b" />
+    </svg>
+  );
+}
+
+export function WoundBallistics() {
+  return (
+    <svg viewBox="0 0 520 270" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="270" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Wound Ballistics — Cavitation" size={14} bold fill="#f59e0b" />
+      <Label x={130} y={50} text="HIGH-VELOCITY (Rifle)" size={11} bold fill="#ef4444" />
+      <ellipse cx={260} cy={90} rx={180} ry={28} fill="#7f1d1d" opacity="0.5" stroke="#ef4444" strokeWidth="1" strokeDasharray="4,3" />
+      <rect x={55} y={83} width={410} height={14} rx={7} fill="#dc2626" opacity="0.8" />
+      <Label x={260} y={80} text="← Temporary cavity (tissue stretching) →" size={9} fill="#fca5a5" />
+      <Label x={260} y={120} text="Permanent cavity (direct crush)" size={9} fill="#94a3b8" />
+      <Label x={130} y={155} text="LOW-VELOCITY (Handgun)" size={11} bold fill="#3b82f6" />
+      <rect x={100} y={175} width={320} height={14} rx={7} fill="#1d4ed8" opacity="0.8" />
+      <Label x={260} y={200} text="Small permanent cavity — minimal temp. cavitation" size={9} fill="#93c5fd" />
+      <rect x={40} y={225} width={440} height={1} fill="#334155" />
+      <Label x={260} y={243} text="KE = ½mv²   Doubling velocity = 4× energy transfer" size={11} bold fill="#f59e0b" />
+      <Label x={260} y={260} text="Perm. cavity = low-velocity wounding | Temp. cavity = high-velocity" size={9} fill="#64748b" />
+    </svg>
+  );
+}
+
+export function ShockClasses() {
+  const classes = [
+    { cl: 'I', loss: '<15%', hr: 'Normal', sbp: 'Normal', ms: 'Normal', tx: 'Monitor', color: '#22c55e' },
+    { cl: 'II', loss: '15-30%', hr: '>100', sbp: 'Normal', ms: 'Anxious', tx: 'IV access', color: '#ca8a04' },
+    { cl: 'III', loss: '30-40%', hr: '>120', sbp: 'Decreased', ms: 'Confused', tx: 'Blood now', color: '#ea580c' },
+    { cl: 'IV', loss: '>40%', hr: '>140', sbp: 'Very low', ms: 'Lethal', tx: 'Massive TX', color: '#dc2626' },
+  ];
+  return (
+    <svg viewBox="0 0 520 275" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="275" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Hemorrhagic Shock Classification" size={13} bold fill="#f59e0b" />
+      {['Class', 'Blood Loss', 'HR', 'SBP', 'Mental Status', 'Treatment'].map((h, i) => (
+        <text key={i} x={[15, 78, 180, 237, 295, 400][i]} y={42} fontSize={9} fill="#64748b" fontFamily="system-ui" fontWeight="bold">{h}</text>
       ))}
-      <p className="text-[10px] text-slate-500">BFP = Bona Fide Purchaser for value</p>
-    </div>
-  );
-}
-
-export function StatuteOfFrauds() {
-  const categories = [
-    { icon: '🏠', name: 'Interests in Land', desc: 'Contracts to buy, sell, or lease real property for >1 year', exception: 'Part performance (possession + payment/improvements)' },
-    { icon: '⏳', name: 'Cannot Perform Within 1 Year', desc: 'Contracts not capable of being performed within one year from formation', exception: 'Full performance by one party' },
-    { icon: '🛡️', name: 'Surety / Guaranty', desc: "Promise to pay another's debt if they default (main purpose exception)", exception: 'Main purpose doctrine (suretyship for own benefit)' },
-    { icon: '💍', name: 'Marriage Consideration', desc: 'Contracts where marriage is consideration (not marriage agreements themselves)', exception: 'Mutual promises to marry do not require writing' },
-    { icon: '📦', name: 'Goods ≥ $500 (UCC)', desc: 'Sale of goods for $500 or more (raised to $1,000 under revised Article 2)', exception: 'Specially manufactured goods; payment + acceptance; merchant memo rule' },
-    { icon: '🏛️', name: 'Executor / Administrator', desc: "Promise by estate representative to pay decedent's debt personally", exception: 'Rarely applies — watch for personal vs. estate liability' },
-  ];
-  return (
-    <div className="p-2 space-y-2">
-      <div className="bg-amber-500/15 border border-amber-500/30 rounded-xl p-2 text-center mb-2">
-        <p className="text-xs font-bold text-amber-300">MY LEGS Mnemonic</p>
-        <p className="text-[10px] text-slate-400">Marriage · Year · Land · Executor · Goods · Surety</p>
-      </div>
-      {categories.map((c, i) => (
-        <div key={i} className="bg-slate-800/50 rounded-lg p-2.5">
-          <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-base">{c.icon}</span>
-            <span className="text-xs font-bold text-slate-200">{c.name}</span>
-          </div>
-          <p className="text-[10px] text-slate-400 leading-relaxed mb-0.5">{c.desc}</p>
-          <p className="text-[10px] text-emerald-400/80">Exception: {c.exception}</p>
-        </div>
+      <rect x={10} y={46} width={500} height={1} fill="#334155" />
+      {classes.map((c, i) => (
+        <g key={i}>
+          <rect x={10} y={52 + i * 50} width={500} height={44} rx={4} fill={i % 2 === 0 ? '#1e293b' : '#0f172a'} />
+          <rect x={10} y={52 + i * 50} width={6} height={44} rx={3} fill={c.color} />
+          <Label x={42} y={79 + i * 50} text={'Class ' + c.cl} size={11} bold fill={c.color} anchor="start" />
+          <Label x={78} y={79 + i * 50} text={c.loss} size={10} fill="#e2e8f0" anchor="start" />
+          <Label x={180} y={79 + i * 50} text={c.hr} size={10} fill="#e2e8f0" anchor="start" />
+          <Label x={237} y={79 + i * 50} text={c.sbp} size={10} fill="#e2e8f0" anchor="start" />
+          <Label x={295} y={79 + i * 50} text={c.ms} size={10} fill="#e2e8f0" anchor="start" />
+          <Label x={400} y={79 + i * 50} text={c.tx} size={10} bold fill={c.color} anchor="start" />
+        </g>
       ))}
-    </div>
+      <Label x={260} y={260} text="Radial pulse lost at Class III — begin blood products immediately" size={10} fill="#94a3b8" />
+    </svg>
   );
 }
 
-export function AdversePossession() {
-  const elements = [
-    { name: 'Actual Entry', abbr: 'A', color: '#f59e0b', desc: 'Physical use and possession of the land', examples: 'Farming, fencing, building, regular use' },
-    { name: 'Open & Notorious', abbr: 'ON', color: '#f97316', desc: 'Visible and obvious to a reasonable owner who inspects the land', examples: 'Cannot be hidden or underground' },
-    { name: 'Exclusive', abbr: 'E', color: '#a78bfa', desc: 'Possession not shared with the true owner', examples: 'Sharing with the public is OK; sharing with owner is not' },
-    { name: 'Continuous', abbr: 'C', color: '#34d399', desc: 'Uninterrupted for the entire statutory period (tacking allowed)', examples: 'Seasonal use may satisfy if consistent with property type' },
-    { name: 'Hostile', abbr: 'H', color: '#60a5fa', desc: "Without owner's permission and inconsistent with owner's rights", examples: "Owner's permission defeats hostility (use = license, not AP)" },
+export function SLUDGEMToxidrome() {
+  const items = [
+    { l: 'S', word: 'Salivation', sub: 'Excessive drooling' },
+    { l: 'L', word: 'Lacrimation', sub: 'Tearing eyes' },
+    { l: 'U', word: 'Urination', sub: 'Involuntary urination' },
+    { l: 'D', word: 'Defecation', sub: 'Involuntary defecation' },
+    { l: 'G', word: 'GI Upset', sub: 'Cramping, vomiting' },
+    { l: 'E', word: 'Emesis', sub: 'Vomiting' },
+    { l: 'M', word: 'Miosis', sub: 'Pinpoint pupils' },
   ];
   return (
-    <div className="p-2">
-      <div className="flex justify-center gap-1 mb-3">
-        {elements.map((e, i) => (
-          <div key={i} className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-slate-900" style={{ backgroundColor: e.color }}>{e.abbr}</div>
-            {i < elements.length - 1 && <div className="hidden" />}
-          </div>
-        ))}
-        <div className="flex items-center ml-2">
-          <span className="text-xs text-slate-400">= AP claim (+ statutory period)</span>
-        </div>
-      </div>
-      <div className="space-y-1.5">
-        {elements.map((e, i) => (
-          <div key={i} className="rounded-lg p-2 border-l-2" style={{ borderColor: e.color, background: e.color + '10' }}>
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <span className="text-[10px] font-black px-1.5 rounded text-slate-900" style={{ backgroundColor: e.color }}>{e.abbr}</span>
-              <span className="text-xs font-bold text-slate-200">{e.name}</span>
-            </div>
-            <p className="text-[10px] text-slate-300 leading-relaxed">{e.desc}</p>
-            <p className="text-[10px] text-slate-500 mt-0.5">e.g. {e.examples}</p>
-          </div>
-        ))}
-      </div>
-      <p className="text-[10px] text-slate-500 mt-2">Statutory period varies by state (5–21 years). Tacking: add successive possessors' periods if privity exists.</p>
-    </div>
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="SLUDGEM — Nerve Agent Toxidrome" size={13} bold fill="#f59e0b" />
+      {items.map((s, i) => {
+        const col = i < 4 ? 0 : 1;
+        const row = i < 4 ? i : i - 4;
+        const x = col === 0 ? 15 : 270;
+        const y = 38 + row * 58;
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width={240} height={48} rx={5} fill="#1e293b" stroke="#7c3aed" strokeWidth="1.5" />
+            <rect x={x} y={y} width={36} height={48} rx={5} fill="#7c3aed" />
+            <Label x={x + 18} y={y + 30} text={s.l} size={18} bold fill="#fff" />
+            <Label x={x + 44} y={y + 20} text={s.word} size={12} bold fill="#c4b5fd" anchor="start" />
+            <Label x={x + 44} y={y + 36} text={s.sub} size={9} fill="#94a3b8" anchor="start" />
+          </g>
+        );
+      })}
+      <Box x={15} y={270} w={490} h={18} fill="#1e293b" stroke="#f59e0b" rx={4}>
+        <Label x={260} y={283} text="Antidote: Atropine (until secretions dry) + 2-PAM (before aging)" size={10} fill="#fde68a" />
+      </Box>
+    </svg>
   );
 }
 
-export function EvidenceStandards() {
-  const standards = [
-    { name: 'Beyond a Reasonable Doubt', pct: '~99%', bar: '97%', color: '#fb7185', used: 'Criminal conviction', desc: 'No reasonable doubt in juror\'s mind; highest standard' },
-    { name: 'Clear & Convincing Evidence', pct: '~75%', bar: '75%', color: '#f59e0b', used: 'Fraud, punitive damages, civil commitment', desc: 'Highly & substantially more probable than not' },
-    { name: 'Preponderance of Evidence', pct: '>50%', bar: '52%', color: '#34d399', used: 'Most civil claims', desc: 'More likely than not; plaintiff\'s scale tips even slightly' },
-    { name: 'Probable Cause', pct: '~40%', bar: '40%', color: '#60a5fa', used: 'Arrest, search warrants, grand jury', desc: 'Fair probability that contraband or evidence will be found' },
-    { name: 'Reasonable Suspicion', pct: '~25%', bar: '25%', color: '#a78bfa', used: 'Terry stop & frisk', desc: 'Articulable, reasonable belief of criminal activity — less than probable cause' },
+export function K9AssessmentFlow() {
+  return (
+    <svg viewBox="0 0 520 290" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="290" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="K9 Tactical Medicine Assessment" size={13} bold fill="#f59e0b" />
+      <Box x={170} y={35} w={180} h={40} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={260} y={60} text="Scene Safety + Handler OK?" size={11} bold fill="#93c5fd" />
+      </Box>
+      <Arrow x1={260} y1={75} x2={260} y2={98} />
+      <Box x={20} y={98} w={220} h={50} fill="#14532d" stroke="#22c55e">
+        <Label x={130} y={118} text="MARCH-PAWS (K9 adapted)" size={11} bold fill="#86efac" />
+        <Label x={130} y={133} text="Hemorrhage → Airway → Breathing" size={9} fill="#d1fae5" />
+      </Box>
+      <Box x={280} y={98} w={220} h={50} fill="#1e293b" stroke="#f59e0b">
+        <Label x={390} y={115} text="K9 Normal Vitals" size={11} bold fill="#fde68a" />
+        <Label x={390} y={130} text="HR: 60-120 | RR: 10-30" size={9} fill="#fef3c7" />
+        <Label x={390} y={143} text="Temp: 100.5-102.5°F | CRT <2s" size={9} fill="#fef3c7" />
+      </Box>
+      <Box x={20} y={170} w={140} h={50} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={90} y={190} text="Hemorrhage" size={11} bold fill="#fca5a5" />
+        <Label x={90} y={206} text="TQ (limb) or packing" size={9} fill="#fef2f2" />
+      </Box>
+      <Box x={190} y={170} w={140} h={50} fill="#1c3520" stroke="#22c55e">
+        <Label x={260} y={190} text="Shock" size={11} bold fill="#86efac" />
+        <Label x={260} y={206} text="10 mg/kg TXA IV" size={9} fill="#f0fdf4" />
+      </Box>
+      <Box x={360} y={170} w={140} h={50} fill="#1e1b4b" stroke="#818cf8">
+        <Label x={430} y={190} text="Pain / Analg." size={11} bold fill="#a5b4fc" />
+        <Label x={430} y={206} text="NO human NSAIDs!" size={9} fill="#e0e7ff" />
+      </Box>
+      <Box x={20} y={240} w={480} h={38} fill="#1e293b" stroke="#ef4444" rx={4}>
+        <Label x={260} y={256} text="CRITICAL: Ibuprofen/naproxen = fatal gastric ulceration + renal failure in K9" size={10} bold fill="#ef4444" />
+        <Label x={260} y={271} text="Safe alternatives: ketamine, tramadol, fentanyl" size={9} fill="#94a3b8" />
+      </Box>
+    </svg>
+  );
+}
+
+export function STARTTriage() {
+  return (
+    <svg viewBox="0 0 520 300" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="300" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="START Triage Algorithm" size={14} bold fill="#f59e0b" />
+      <Box x={185} y={35} w={150} h={38} fill="#1e293b" stroke="#64748b">
+        <Label x={260} y={59} text="Casualty encountered" size={11} fill="#e2e8f0" />
+      </Box>
+      <Arrow x1={260} y1={73} x2={260} y2={90} />
+      <Box x={185} y={90} w={150} h={38} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={260} y={114} text="Walking?" size={11} fill="#93c5fd" />
+      </Box>
+      <Arrow x1={185} y1={109} x2={100} y2={145} color="#22c55e" />
+      <Arrow x1={335} y1={109} x2={380} y2={145} color="#ef4444" />
+      <Label x={128} y={137} text="YES" size={10} fill="#22c55e" />
+      <Label x={358} y={137} text="NO" size={10} fill="#ef4444" />
+      <Box x={30} y={145} w={120} h={38} fill="#14532d" stroke="#22c55e">
+        <Label x={90} y={169} text="MINOR (Green)" size={10} bold fill="#86efac" />
+      </Box>
+      <Box x={340} y={145} w={150} h={38} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={415} y={164} text="Respirations?" size={10} fill="#93c5fd" />
+        <Label x={415} y={177} text=">30/min or absent" size={9} fill="#64748b" />
+      </Box>
+      <Arrow x1={415} y1={183} x2={415} y2={205} />
+      <Box x={340} y={205} w={150} h={38} fill="#1e293b" stroke="#ca8a04">
+        <Label x={415} y={224} text="Cap refill >2s?" size={10} fill="#fde68a" />
+      </Box>
+      <Arrow x1={415} y1={243} x2={415} y2={260} />
+      <Box x={340} y={260} w={150} h={32} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={415} y={281} text="IMMEDIATE (Red)" size={10} bold fill="#fca5a5" />
+      </Box>
+      <Box x={30} y={240} w={120} h={32} fill="#450a0a" stroke="#991b1b">
+        <Label x={90} y={261} text="EXPECTANT (Black)" size={9} bold fill="#fca5a5" />
+      </Box>
+      <Label x={90} y={220} text="No resp after" size={9} fill="#64748b" />
+      <Label x={90} y={233} text="repositioning" size={9} fill="#64748b" />
+    </svg>
+  );
+}
+
+export function NineLineMEDEVAC() {
+  const lines = [
+    { n: '1', label: 'Location (Grid)', detail: '8-digit grid coordinate of pickup' },
+    { n: '2', label: 'Radio/Callsign', detail: 'Freq + callsign of requesting unit' },
+    { n: '3', label: 'Patients by Precedence', detail: 'Urgent/Priority/Routine (count each)' },
+    { n: '4', label: 'Special Equipment', detail: 'Hoist, extraction equipment, ventilator' },
+    { n: '5', label: 'Patients by Type', detail: 'Litter vs. ambulatory count' },
+    { n: '6', label: 'Security at Site', detail: 'No enemy / possible / enemy / escort' },
+    { n: '7', label: 'Marking Method', detail: 'Panels / smoke / lights / other' },
+    { n: '8', label: 'Patient Nationality', detail: 'US mil / US civ / non-US mil / EPW' },
+    { n: '9', label: 'NBC Contamination', detail: 'Nuclear / Biological / Chemical / None' },
   ];
   return (
-    <div className="p-2 space-y-2">
-      {standards.map((s, i) => (
-        <div key={i}>
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-xs font-semibold text-slate-200">{s.name}</span>
-            <span className="text-xs font-bold" style={{ color: s.color }}>{s.pct}</span>
-          </div>
-          <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden mb-0.5">
-            <div className="h-full rounded-full transition-all" style={{ width: s.bar, backgroundColor: s.color }} />
-          </div>
-          <div className="flex justify-between">
-            <p className="text-[10px] text-slate-400">{s.desc}</p>
-            <span className="text-[10px] shrink-0 ml-2 text-slate-500 italic">{s.used}</span>
-          </div>
-        </div>
+    <svg viewBox="0 0 520 295" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="295" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="9-Line MEDEVAC Request" size={14} bold fill="#f59e0b" />
+      {lines.map((l, i) => (
+        <g key={i}>
+          <rect x={10} y={32 + i * 28} width={500} height={26} rx={3} fill={i % 2 === 0 ? '#1e293b' : '#0f172a'} />
+          <rect x={10} y={32 + i * 28} width={24} height={26} rx={3} fill="#1e3a5f" />
+          <Label x={22} y={50 + i * 28} text={l.n} size={11} bold fill="#93c5fd" />
+          <Label x={42} y={50 + i * 28} text={l.label} size={10} bold fill="#f1f5f9" anchor="start" />
+          <Label x={200} y={50 + i * 28} text={l.detail} size={9} fill="#64748b" anchor="start" />
+        </g>
       ))}
-    </div>
+    </svg>
+  );
+}
+
+export function RuleOf10Burns() {
+  return (
+    <svg viewBox="0 0 520 280" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="280" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Rule of 10s — Burn Resuscitation" size={13} bold fill="#f59e0b" />
+      <Box x={130} y={35} w={260} h={55} fill="#1e293b" stroke="#f59e0b">
+        <Label x={260} y={57} text="IV Rate (mL/hr) = %TBSA × 10" size={14} bold fill="#f59e0b" />
+        <Label x={260} y={76} text="Lactated Ringer's — for 70-80 kg adult" size={10} fill="#94a3b8" />
+      </Box>
+      <Box x={20} y={110} w={225} h={100} fill="#1e293b" stroke="#3b82f6">
+        <Label x={132} y={130} text="Urine Output Targets" size={11} bold fill="#93c5fd" />
+        <Label x={132} y={150} text="Standard: 30-50 mL/hr" size={10} fill="#e2e8f0" />
+        <Label x={132} y={168} text="(0.5 mL/kg/hr)" size={10} fill="#94a3b8" />
+        <Label x={132} y={188} text="Rhabdo/Electrical:" size={10} fill="#fde68a" />
+        <Label x={132} y={204} text="75-100 mL/hr" size={10} fill="#fde68a" />
+      </Box>
+      <Box x={275} y={110} w={225} h={100} fill="#1e293b" stroke="#22c55e">
+        <Label x={387} y={130} text="Adjust Hourly" size={11} bold fill="#86efac" />
+        <Label x={387} y={150} text="UO <30 → increase 20%" size={10} fill="#e2e8f0" />
+        <Label x={387} y={168} text="UO >50 → decrease 20%" size={10} fill="#e2e8f0" />
+        <Label x={387} y={188} text="Fluid creep = risk of" size={10} fill="#fca5a5" />
+        <Label x={387} y={204} text="compartment syndrome" size={10} fill="#fca5a5" />
+      </Box>
+      <Box x={60} y={225} w={400} h={44} fill="#1e293b" stroke="#f59e0b" rx={4}>
+        <Label x={260} y={244} text="Example: 35% TBSA burn, 75kg adult" size={11} fill="#fde68a" />
+        <Label x={260} y={261} text="35 × 10 = 350 mL/hr LR → monitor UO and adjust" size={10} fill="#94a3b8" />
+      </Box>
+    </svg>
+  );
+}
+
+export function AnalgesiaAlgorithm() {
+  return (
+    <svg viewBox="0 0 520 295" className="w-full max-w-lg mx-auto">
+      <Defs />
+      <rect width="520" height="295" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="TCCC Analgesia Decision Algorithm" size={13} bold fill="#f59e0b" />
+      <Box x={170} y={35} w={180} h={40} fill="#1e293b" stroke="#f59e0b">
+        <Label x={260} y={60} text="Pain assessment needed" size={11} fill="#e2e8f0" />
+      </Box>
+      <Arrow x1={260} y1={75} x2={260} y2={98} />
+      <Box x={170} y={98} w={180} h={40} fill="#1e3a5f" stroke="#3b82f6">
+        <Label x={260} y={118} text="Hemodynamically stable?" size={11} fill="#93c5fd" />
+        <Label x={260} y={132} text="BP OK, alert, RR >12" size={9} fill="#64748b" />
+      </Box>
+      <Arrow x1={170} y1={118} x2={85} y2={160} color="#22c55e" />
+      <Arrow x1={350} y1={118} x2={435} y2={160} color="#ef4444" />
+      <Label x={100} y={152} text="YES" size={10} fill="#22c55e" />
+      <Label x={415} y={152} text="NO" size={10} fill="#ef4444" />
+      <Box x={20} y={160} w={130} h={50} fill="#14532d" stroke="#22c55e">
+        <Label x={85} y={178} text="Mild pain" size={10} bold fill="#86efac" />
+        <Label x={85} y={194} text="Meloxicam 15mg" size={9} fill="#d1fae5" />
+        <Label x={85} y={207} text="PO (CWMP)" size={9} fill="#d1fae5" />
+      </Box>
+      <Box x={165} y={160} w={130} h={50} fill="#1c3520" stroke="#f59e0b">
+        <Label x={230} y={178} text="Mod. pain" size={10} bold fill="#fde68a" />
+        <Label x={230} y={194} text="OTFC 800 mcg" size={9} fill="#fef3c7" />
+        <Label x={230} y={207} text="(intact airway)" size={9} fill="#fef3c7" />
+      </Box>
+      <Box x={370} y={160} w={130} h={50} fill="#7f1d1d" stroke="#ef4444">
+        <Label x={435} y={178} text="Unstable" size={10} bold fill="#fca5a5" />
+        <Label x={435} y={194} text="Ketamine" size={9} fill="#fef2f2" />
+        <Label x={435} y={207} text="20-30mg IV" size={9} fill="#fef2f2" />
+        <Label x={435} y={220} text="50mg IM" size={9} fill="#fef2f2" />
+      </Box>
+      <Box x={20} y={230} w={480} h={55} fill="#1e293b" stroke="#7c3aed" rx={4}>
+        <Label x={260} y={248} text="OTFC Contraindications: AMS, RR <12, unable to protect airway" size={10} fill="#c4b5fd" />
+        <Label x={260} y={265} text="Ketamine: preserves BP + airway reflexes → always safe in tactical settings" size={10} fill="#a5b4fc" />
+        <Label x={260} y={280} text="Meloxicam: never give if GI bleed suspected or anticoagulated" size={10} fill="#c4b5fd" />
+      </Box>
+    </svg>
+  );
+}
+
+export function GasLawsFlight() {
+  return (
+    <svg viewBox="0 0 520 285" className="w-full max-w-lg mx-auto">
+      <rect width="520" height="285" fill="#0f172a" rx="8" />
+      <Label x={260} y={22} text="Gas Laws in Flight Medicine" size={14} bold fill="#f59e0b" />
+      {[
+        {
+          name: "Boyle's Law", formula: 'P₁V₁ = P₂V₂',
+          effect: 'Pressure ↓ at altitude → Gas volume ↑',
+          relevance: 'ETT cuff → pneumothorax → sinus air → intracranial air',
+          color: '#3b82f6'
+        },
+        {
+          name: "Dalton's Law", formula: 'P_total = ΣP_partial',
+          effect: 'P_O₂ falls at altitude (21% stays same)',
+          relevance: 'Hypoxic hypoxia → O₂ mandatory for TBI >10,000 ft',
+          color: '#22c55e'
+        },
+        {
+          name: "Henry's Law", formula: 'Gas solubility ∝ Pressure',
+          effect: 'Rapid pressure drop → dissolved N₂ bubbles',
+          relevance: 'Decompression sickness — "the bends"',
+          color: '#f59e0b'
+        },
+      ].map((l, i) => (
+        <g key={i}>
+          <rect x={15} y={38 + i * 78} width={490} height={70} rx={6} fill="#1e293b" stroke={l.color} strokeWidth="1.5" />
+          <Label x={35} y={60 + i * 78} text={l.name} size={13} bold fill={l.color} anchor="start" />
+          <rect x={200} y={42 + i * 78} width={170} height={26} rx={4} fill="#0f172a" />
+          <Label x={285} y={61 + i * 78} text={l.formula} size={12} bold fill={l.color} />
+          <Label x={35} y={78 + i * 78} text={'→ ' + l.effect} size={10} fill="#e2e8f0" anchor="start" />
+          <Label x={35} y={96 + i * 78} text={'Clinical: ' + l.relevance} size={9} fill="#94a3b8" anchor="start" />
+        </g>
+      ))}
+    </svg>
   );
 }
 
 export const DIAGRAM_VISUALS = {
-  'Court Hierarchy':        CourtHierarchy,
-  'Civil Litigation Flow':  CivilLitigationFlow,
-  'Contract Elements':      ContractElements,
-  'Negligence Elements':    NegligenceElements,
-  'Bill of Rights':         BillOfRights,
-  'Business Entities':      BusinessEntities,
-  'Property Ownership':     PropertyOwnership,
-  'Prof Responsibility':    ProfResponsibility,
-  'Hearsay Exceptions':     HearsayExceptions,
-  'Fourth Amendment':       FourthAmendment,
-  'Contract Remedies':      ContractRemedies,
-  'Intentional Torts':      IntentionalTorts,
-  'Recording Acts':         RecordingActs,
-  'Statute of Frauds':      StatuteOfFrauds,
-  'Adverse Possession':     AdversePossession,
-  'Evidence Standards':     EvidenceStandards,
+  'TECC Phases':          TECCPhases,
+  'MARCH-PAWS':           MARCHPaws,
+  'RTF Integration':      RTFIntegration,
+  'Tourniquet Decision':  TourniquetDecision,
+  'DCR Flow':             DCRFlow,
+  'Lethal Triad':         LethalTriad,
+  'Cricothyrotomy Steps': CrichotomySteps,
+  'Tension Pneumo':       TensionPneumo,
+  'Blast Injury Types':   BlastInjuryTypes,
+  'Wound Ballistics':     WoundBallistics,
+  'Shock Classes':        ShockClasses,
+  'Crush Syndrome Timeline': ShockClasses,
+  'SLUDGEM Toxidrome':    SLUDGEMToxidrome,
+  'Chemical Agent Types': SLUDGEMToxidrome,
+  'K9 Assessment Flow':   K9AssessmentFlow,
+  'START Triage':         STARTTriage,
+  '9-Line MEDEVAC':       NineLineMEDEVAC,
+  'Rule of 10s Burns':    RuleOf10Burns,
+  'Analgesia Algorithm':  AnalgesiaAlgorithm,
+  'Gas Laws Flight':      GasLawsFlight,
 };

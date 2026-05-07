@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import questions from '../data/questions.json';
 import { useProgress } from '../hooks/useProgress';
 
-const EXAM_Q = 120;
+const EXAM_Q = 100;
 const EXAM_MINS = 150;
 const EXAM_SECS = EXAM_MINS * 60;
-const EXAM_NAME = 'Certified Paralegal (CP) Exam Simulation';
+const EXAM_NAME = 'CTAC-P Full Exam Simulation';
 
 export default function ExamMode({ onNavigate }) {
   const { recordAnswer, saveSession, addToErrorLog } = useProgress();
@@ -232,7 +232,7 @@ function AdvisoryScreen({ onStart, onBack }) {
       </div>
       <div className="flex-1 px-4 py-8 flex flex-col items-center justify-center">
         <div className="text-6xl mb-4 text-center">📝</div>
-        <h2 className="text-2xl font-bold mb-2 text-center">Certified Paralegal (CP) Exam</h2>
+        <h2 className="text-2xl font-bold mb-2 text-center">CTAC-P Full Exam</h2>
         <p className="text-slate-400 text-sm leading-relaxed text-center max-w-sm mb-8">
           Simulate real exam conditions. Read the details below, find a quiet space, and allow the full time.
         </p>

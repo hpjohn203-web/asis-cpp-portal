@@ -1,1 +1,120 @@
-export const FORMULAS = [];
+export const FORMULAS = [
+  {
+    topic: 'Blast & Ballistics',
+    name: 'Kinetic Energy (Wound Ballistics)',
+    formula: 'KE = ½ × m × v²',
+    variables: [
+      { symbol: 'KE', meaning: 'Kinetic Energy — energy transferred to tissue on impact' },
+      { symbol: 'm', meaning: 'Mass of the projectile (in grams or slugs)' },
+      { symbol: 'v', meaning: 'Velocity of the projectile — squared, making it the dominant factor' },
+    ],
+    notes: 'Velocity is squared, so doubling velocity quadruples energy transfer. This is why high-velocity rifle rounds cause massive temporary cavitation vs. low-velocity handgun rounds.',
+    example: 'A 5.56mm round at 3,000 ft/s has ~4x the KE of the same round at 1,500 ft/s',
+  },
+  {
+    topic: 'CBRN & Chemical Threats',
+    name: 'Inverse Square Law (Radiation)',
+    formula: 'Dose Rate ∝ 1/d²',
+    variables: [
+      { symbol: 'Dose Rate', meaning: 'Radiation dose received per unit time' },
+      { symbol: 'd', meaning: 'Distance from the radioactive source' },
+    ],
+    notes: 'Doubling your distance from a source reduces the dose rate to 25% (quartered). Core of radiation protection: Time-Distance-Shielding.',
+    example: 'At 2 meters dose rate = 100 mR/hr. At 4 meters (2×) = 25 mR/hr. At 8 meters (4×) = 6.25 mR/hr',
+  },
+  {
+    topic: 'Airway & Respiratory',
+    name: "Boyle's Law (Flight/Altitude)",
+    formula: 'P₁V₁ = P₂V₂',
+    variables: [
+      { symbol: 'P₁', meaning: 'Initial pressure (ground level)' },
+      { symbol: 'V₁', meaning: 'Initial gas volume (ground level)' },
+      { symbol: 'P₂', meaning: 'New pressure (altitude — lower)' },
+      { symbol: 'V₂', meaning: 'New gas volume (expands as pressure drops)' },
+    ],
+    notes: 'As altitude increases, barometric pressure drops and trapped gases expand — critical for: ETT/LMA cuff management (deflate), pneumothorax worsening, Heimlich valve occlusion, intraocular air, intracranial air.',
+    example: 'A pneumothorax at sea level occupies 20% of chest cavity. At altitude (lower P₂), V₂ expands — can become life-threatening tension pneumothorax',
+  },
+  {
+    topic: 'Environmental & Prolonged Care',
+    name: 'Rule of 10s — Burn Fluid Resuscitation',
+    formula: 'IV Rate (mL/hr) = %TBSA × 10',
+    variables: [
+      { symbol: '%TBSA', meaning: 'Percentage Total Body Surface Area burned (2nd/3rd degree only)' },
+      { symbol: '10', meaning: 'Constant for 70-80 kg adult — adjust for weight extremes' },
+      { symbol: 'Target UO', meaning: 'Standard: 30-50 mL/hr. Rhabdomyolysis/electrical: 75-100 mL/hr' },
+    ],
+    notes: 'Uses Lactated Ringer\'s. Adjust rate based on urine output response — decrease if >50 mL/hr (fluid creep risk), increase if <30 mL/hr. CoTCCC modification of Parkland formula for field use.',
+    example: '25% TBSA burn in a 75 kg adult: 25 × 10 = 250 mL/hr LR. Check UO at 1 hour and adjust.',
+  },
+  {
+    topic: 'Hemorrhage Control',
+    name: 'Permissive Hypotension Targets',
+    formula: 'No TBI: SBP 80-90 mmHg (palpable radial pulse) | With TBI: SBP ≥110 mmHg',
+    variables: [
+      { symbol: 'SBP', meaning: 'Systolic Blood Pressure' },
+      { symbol: 'No TBI', meaning: 'Allow relative hypotension — prevents dislodging hemostatic clots' },
+      { symbol: 'With TBI', meaning: 'Must maintain cerebral perfusion pressure — higher target mandatory' },
+    ],
+    notes: 'Permissive hypotension is a key DCR principle. A palpable radial pulse is a sufficient field indicator for SBP ~80 mmHg. TBI changes everything — brain requires higher perfusion pressure.',
+    example: 'Casualty with femoral TQ and GCS 15 → target palpable radial pulse. Same casualty with GCS 8 and blown pupil → target SBP ≥110.',
+  },
+  {
+    topic: 'Medications & Analgesia',
+    name: 'TXA (Tranexamic Acid) — Time-Critical Protocol',
+    formula: 'Give within 3 hours of injury | Withhold after 3 hours',
+    variables: [
+      { symbol: '1g IV/IO', meaning: 'Administered over 10 minutes (or 2g slow push per 2026 CoTCCC updates)' },
+      { symbol: 'Window', meaning: 'Maximum benefit <1 hour; still beneficial 1-3 hours; harmful after 3 hours' },
+      { symbol: 'TBI co-injury', meaning: 'TXA is NOT contraindicated with TBI — give if hemorrhage present within window' },
+    ],
+    notes: 'TXA is an antifibrinolytic — prevents breakdown of blood clots. CRASH-2 and MATTERs trials show mortality benefit when given early. After 3 hours, TXA paradoxically increases thromboembolic events. NEVER co-administer through the same IV line as blood products (causes precipitation).',
+    example: 'Casualty shot at 14:00. TXA must be given by 17:00. If evac ETA is 16:45, give TXA immediately in the field.',
+  },
+  {
+    topic: 'Medications & Analgesia',
+    name: 'TCCC Triple-Option Analgesia Algorithm',
+    formula: 'Mild pain (stable) → Meloxicam 15 mg PO | Moderate pain (stable) → OTFC 800 mcg | Severe/unstable → Ketamine 20-30 mg IV or 50 mg IM',
+    variables: [
+      { symbol: 'Meloxicam', meaning: 'NSAID from CWMP — only if hemodynamically stable, no GI bleed risk, no TBI' },
+      { symbol: 'OTFC 800 mcg', meaning: 'Fentanyl lozenge — requires airway protection, RR >12, no AMS' },
+      { symbol: 'Ketamine', meaning: 'Preferred for severe pain or hemodynamic instability — preserves respirations and BP' },
+    ],
+    notes: 'Ketamine is the only analgesic safe in hemodynamic instability. OTFC is contraindicated with altered mental status (aspiration risk if patient becomes sedated). Meloxicam is reserved for non-critical casualties.',
+    example: 'Casualty with fractured femur, BP 85/50 → Ketamine 50 mg IM. Same patient, BP 130/80, RR 18, alert → OTFC 800 mcg',
+  },
+  {
+    topic: 'Hemorrhage Control',
+    name: 'Crush Syndrome Pre-Release Resuscitation',
+    formula: 'LR 1-1.5 L/hr IV before release + NaHCO₃ to alkalinize urine + Calcium Gluconate if ECG changes',
+    variables: [
+      { symbol: 'LR (Lactated Ringer\'s)', meaning: 'Preferred crystalloid — low chloride reduces acidosis risk vs. Normal Saline' },
+      { symbol: 'NaHCO₃', meaning: 'Sodium bicarbonate — alkalinizes urine to prevent myoglobin precipitation in renal tubules' },
+      { symbol: 'Calcium Gluconate', meaning: 'Stabilizes myocardium against hyperkalemia-induced fatal arrhythmia (peaked T-waves, wide QRS)' },
+    ],
+    notes: 'Myoglobin causes direct tubular toxicity and precipitates in acidic urine — alkalization is protective. Target UO: 75-100 mL/hr. Hyperkalemia ECG: tall peaked T-waves → absent P-waves → wide QRS → sine wave → PEA arrest.',
+    example: 'Casualty pinned for 4 hours — establish IV access, begin 1L LR BEFORE releasing the entrapping object to prevent sudden cardiovascular collapse from reperfusion',
+  },
+  {
+    topic: 'Environmental & Prolonged Care',
+    name: "Henry's Law (Decompression Sickness)",
+    formula: 'Gas solubility ∝ Pressure',
+    variables: [
+      { symbol: 'Solubility', meaning: 'Amount of gas dissolved in a liquid — proportional to pressure above the liquid' },
+      { symbol: 'Rapid ascent', meaning: 'Pressure drops faster than nitrogen can be exhaled — bubbles form in tissues/blood' },
+    ],
+    notes: 'Decompression sickness (DCS) results when dissolved nitrogen comes out of solution as bubbles. Symptoms: joint pain ("the bends"), neurological deficits, skin mottling. Treatment: 100% O₂, hyperbaric oxygen therapy.',
+    example: 'Diver ascends too rapidly → dissolved N₂ bubbles form in joints and spinal cord → "the bends"',
+  },
+  {
+    topic: 'Airway & Respiratory',
+    name: "Dalton's Law (Altitude Hypoxia)",
+    formula: 'P_total = P_N₂ + P_O₂ + P_CO₂ + ... (sum of partial pressures)',
+    variables: [
+      { symbol: 'P_O₂', meaning: 'Partial pressure of oxygen — falls as altitude increases even though %O₂ stays at 21%' },
+      { symbol: 'Hypoxic hypoxia', meaning: 'SpO₂ drops at altitude due to reduced P_O₂ driving O₂ across the alveolar membrane' },
+    ],
+    notes: 'At sea level P_O₂ ≈ 159 mmHg. At 10,000 ft ≈ 110 mmHg. At 29,000 ft (Everest) ≈ 43 mmHg. Supplemental O₂ mandatory for TBI patients above 10,000 ft MSL to maintain SpO₂ >90%.',
+    example: 'Unpressurized medevac helo at 12,000 ft: TBI patient\'s P_O₂ drops significantly → mandatory supplemental O₂ even if SpO₂ appears acceptable at ground level',
+  },
+];

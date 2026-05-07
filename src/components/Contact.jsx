@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const FORMSPREE_ID = 'mzdogjjv';
-const PORTAL_PREFIX = '[Certified Paralegal - ApexCert]';
+const PORTAL_PREFIX = '[CTAC-P - ApexCert]';
 const AMAZON_URL = 'https://www.amazon.com';
 
 const STARS = [1, 2, 3, 4, 5];
@@ -14,7 +14,7 @@ function AmazonCard() {
         <div>
           <p className="font-semibold text-sm text-slate-200 mb-1">Also enjoyed the study guide?</p>
           <p className="text-xs text-slate-400 leading-relaxed mb-4">
-            If our Certified Paralegal study guide helped with your preparation, we'd truly appreciate a quick review on Amazon — it means the world to our small brand and helps other candidates find the right resource. Thank you so much!
+            If our CTAC-P study guide helped with your preparation, we'd truly appreciate a quick review on Amazon — it means the world to our small brand and helps other candidates find the right resource. Thank you so much!
           </p>
           <a
             href={AMAZON_URL}
@@ -75,7 +75,7 @@ export default function Contact({ onNavigate }) {
         <div className="lg:col-span-2 mb-6 lg:mb-0">
           <h2 className="text-2xl font-bold mb-2">Rate & Review</h2>
           <p className="text-slate-400 text-sm leading-relaxed mb-6">
-            How is the Certified Paralegal study portal working for you? We built this to help you pass — your honest feedback helps us make it better.
+            How is the CTAC-P study portal working for you? We built this to help you pass — your honest feedback helps us make it better.
           </p>
 
           <div className="space-y-4 mb-8">

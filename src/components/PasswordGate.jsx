@@ -3,7 +3,7 @@ import { useState } from 'react';
 // ← Change PORTAL_PASSWORD to whatever you print in the CP book
 const PORTAL_PASSWORD = 'CP2025';
 const CREATOR_PASSWORD = 'hpJOHN2003.';
-const STORAGE_KEY = 'cp_unlocked';
+const STORAGE_KEY = 'ctacp_unlocked';
 
 export default function PasswordGate({ children }) {
   const [unlocked, setUnlocked] = useState(() => localStorage.getItem(STORAGE_KEY) === '1');
@@ -32,7 +32,7 @@ export default function PasswordGate({ children }) {
           <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🔐</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-100 mb-1">Certified Paralegal</h1>
+          <h1 className="text-2xl font-bold text-slate-100 mb-1">Certified Tactical Paramedic (CTAC-P)</h1>
           <p className="text-sm text-amber-400 font-semibold tracking-wide">ApexCert Study Portal</p>
         </div>
 
