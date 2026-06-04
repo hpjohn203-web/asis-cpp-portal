@@ -3,10 +3,10 @@ import questions from '../data/questions.json';
 import { useProgress } from '../hooks/useProgress';
 import ReviewNudge, { checkAndIncrementNudge } from './ReviewNudge';
 
-const EXAM_Q = 125;
-const EXAM_MINS = 150;
+const EXAM_Q = 200;
+const EXAM_MINS = 240;
 const EXAM_SECS = EXAM_MINS * 60;
-const EXAM_NAME = 'CTAC-P Full Exam Simulation';
+const EXAM_NAME = 'ASIS CPP Full Exam Simulation';
 
 export default function ExamMode({ onNavigate }) {
   const { recordAnswer, saveSession, addToErrorLog } = useProgress();

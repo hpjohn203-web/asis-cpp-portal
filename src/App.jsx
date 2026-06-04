@@ -14,6 +14,7 @@ import Bookmarks from './components/Bookmarks';
 import Search from './components/Search';
 import Contact from './components/Contact';
 import ExamMode from './components/ExamMode';
+import PasswordGate from './components/PasswordGate';
 
 export default function App() {
   const [screen, setScreen] = useState('home');
@@ -67,6 +68,7 @@ export default function App() {
   }, []);
 
   return (
+    <PasswordGate>
     <Layout screen={screen} onNavigate={setScreen} lightMode={lightMode} onToggleTheme={() => setLightMode(m => !m)} notifEnabled={notifEnabled} onToggleNotif={toggleNotif}>
       {screen === 'home'      && <Home onNavigate={setScreen} />}
       {screen === 'study'     && <StudyMode onNavigate={setScreen} />}
@@ -83,5 +85,6 @@ export default function App() {
       {screen === 'contact'   && <Contact onNavigate={setScreen} />}
       {screen === 'exam'      && <ExamMode onNavigate={setScreen} />}
     </Layout>
+    </PasswordGate>
   );
 }

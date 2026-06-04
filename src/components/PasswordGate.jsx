@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-// ← Change PORTAL_PASSWORD to whatever you print in the CP book
-const PORTAL_PASSWORD = 'CP2025';
+const PORTAL_PASSWORD = 'apexcert-ctacp-z;N&!h;Y?Uxqp*Ip';
 const CREATOR_PASSWORD = 'hpJOHN2003.';
 const STORAGE_KEY = 'ctacp_unlocked';
 

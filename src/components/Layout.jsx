@@ -40,7 +40,7 @@ function Sidebar({ screen, onNavigate, onClose, lightMode, onToggleTheme, notifE
         ) : (
           <>
             <div>
-              <h1 className="text-lg font-bold text-amber-400">CTAC-P Exam Prep</h1>
+              <h1 className="text-lg font-bold text-amber-400">ASIS CPP Exam Prep</h1>
               <p className="text-xs text-slate-500 mt-0.5">ApexCert Publications</p>
             </div>
             {onClose && (
@@ -112,15 +112,15 @@ function Sidebar({ screen, onNavigate, onClose, lightMode, onToggleTheme, notifE
 
 export default function Layout({ screen, onNavigate, children, lightMode, onToggleTheme, notifEnabled, onToggleNotif }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('ctacp_sidebar_collapsed') === '1');
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('cpp_sidebar_collapsed') === '1');
 
   function toggleCollapse() {
     const next = !collapsed;
     setCollapsed(next);
-    localStorage.setItem('ctacp_sidebar_collapsed', next ? '1' : '0');
+    localStorage.setItem('cpp_sidebar_collapsed', next ? '1' : '0');
   }
 
-  const currentLabel = NAV_GROUPS.flatMap(g => g.items).find(i => i.id === screen)?.label || 'CTAC-P Exam Prep';
+  const currentLabel = NAV_GROUPS.flatMap(g => g.items).find(i => i.id === screen)?.label || 'ASIS CPP Exam Prep';
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 flex">

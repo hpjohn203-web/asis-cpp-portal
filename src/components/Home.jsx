@@ -7,40 +7,37 @@ import { useProgress } from '../hooks/useProgress';
 const TOTAL_CONTENT = questions.length;
 
 const HOW_TO_ITEMS = [
-  { icon: '🃏', title: 'Flashcards', desc: '1,000 tactical medicine flashcards covering all CTAC-P domains. Spaced repetition ensures cards you struggle with come back sooner.' },
+  { icon: '🃏', title: 'Flashcards', desc: '1,000 ASIS CPP flashcards covering all exam domains. Spaced repetition ensures cards you struggle with come back sooner.' },
   { icon: '⏱️', title: 'Quiz Mode', desc: 'Timed MCQ practice with scenario-based questions. Choose topic, count, and timer. Answers revealed at end with full breakdown.' },
-  { icon: '📝', title: 'Full Exam', desc: '100-question, 150-minute simulation of the CTAC-P TP-C exam. Navigate freely, flag questions, submit when ready.' },
+  { icon: '📝', title: 'Full Exam', desc: '200-question, 240-minute simulation of the ASIS CPP exam. Navigate freely, flag questions, submit when ready.' },
   { icon: '🎯', title: 'Drill Weak Topics', desc: 'Appears on the dashboard once enough data exists. One tap auto-starts a quiz on your 3 lowest-accuracy topics.' },
   { icon: '📊', title: 'My Progress', desc: 'Full accuracy breakdown by topic, session history, and CSV export for offline review.' },
-  { icon: '📖', title: 'Glossary', desc: 'Searchable definitions of key TCCC/TECC terms, medications, acronyms, and protocols across all tactical medicine domains.' },
-  { icon: '🧮', title: 'Formulas', desc: 'Reference calculations — KE formula, Rule of 10s, TXA protocols, gas laws, permissive hypotension targets, and more.' },
-  { icon: '🖼️', title: 'Diagrams', desc: 'Visual references for TECC phases, MARCH-PAWS, RTF integration, blast injury types, and key tactical medicine concepts.' },
+  { icon: '📖', title: 'Glossary', desc: 'Searchable definitions of key CPP terms — ESRM, ALE, CPTED, FCRA, BCP, ICS, and all security management concepts.' },
+  { icon: '🧮', title: 'Formulas', desc: 'Reference calculations — ALE, SLE, ARO, ROSI, payback period, CARVER scoring, and more.' },
+  { icon: '🖼️', title: 'Diagrams', desc: 'Visual references for ESRM model, Defense in Depth, CPTED, ICS structure, BIA timeline, and all CPP domains.' },
   { icon: '📅', title: 'Study Planner', desc: 'Set your exam date, daily goal, and mark planned study days on the weekly calendar.' },
   { icon: '⚠️', title: 'Error Log', desc: 'Every wrong quiz answer is logged here by topic for targeted review.' },
   { icon: '🔖', title: 'Bookmarks', desc: 'Save any question during flashcards or quiz — review them anytime in Bookmarks.' },
 ];
 
 const TOPIC_ICONS = {
-  'Tactical Medicine Framework': '🎯',
-  'Hemorrhage Control': '🩸',
-  'Airway': '🫁',
-  'Respiratory': '🫁',
-  'Shock': '💉',
-  'Resuscitation': '💉',
-  'Blast': '💥',
-  'Ballistics': '💥',
-  'Environmental': '🌡️',
-  'Prolonged Care': '🌡️',
-  'CBRN': '☢️',
-  'Chemical': '☢️',
-  'K9': '🐕',
-  'Triage': '🏥',
-  'Mass Casualty': '🏥',
-  'Medications': '💊',
-  'Analgesia': '💊',
+  'Security Risk Management': '🛡️',
+  'Physical Security': '🏢',
+  'Investigations': '🔍',
+  'Personnel Security': '👤',
+  'Information Security': '💻',
+  'Crisis Management': '🚨',
+  'Business Continuity': '🔄',
+  'Workplace Violence': '⚠️',
   'Legal': '⚖️',
-  'Ethics': '⚖️',
-  'Operations': '⚖️',
+  'Regulatory': '⚖️',
+  'Executive Protection': '🕵️',
+  'Fire': '🔥',
+  'Life Safety': '🔥',
+  'Supply Chain': '📦',
+  'Security Management': '📋',
+  'Governance': '📋',
+  'Security Principles': '🎓',
 };
 
 function getIcon(topic) {
@@ -55,8 +52,8 @@ export default function Home({ onNavigate }) {
   const topicStats = useMemo(() => getTopicStats(questions), [progress]);
   const masteredTopics = useMemo(() => getMasteredTopics(questions), [progress]);
   const streak = getStudyStreak();
-  const [showWelcome, setShowWelcome] = useState(() => !sessionStorage.getItem('ctacp_welcome_shown'));
-  function dismissWelcome() { sessionStorage.setItem('ctacp_welcome_shown', '1'); setShowWelcome(false); }
+  const [showWelcome, setShowWelcome] = useState(() => !sessionStorage.getItem('cpp_welcome_shown'));
+  function dismissWelcome() { sessionStorage.setItem('cpp_welcome_shown', '1'); setShowWelcome(false); }
 
   const todayCount = getTodayCount();
   const goalPerDay = progress.studyPlan?.goalPerDay || 20;
@@ -99,7 +96,7 @@ export default function Home({ onNavigate }) {
             <div className="px-6 py-5 border-b border-slate-800 flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs text-amber-400 font-semibold uppercase tracking-wider mb-1">ApexCert Publications</p>
-                <h2 className="text-xl lg:text-2xl font-bold">Welcome to CTAC-P Exam Prep! 👋</h2>
+                <h2 className="text-xl lg:text-2xl font-bold">Welcome to ASIS CPP Exam Prep! 👋</h2>
                 <p className="text-sm text-slate-400 mt-1">Here's everything this portal gives you:</p>
               </div>
               <button onClick={dismissWelcome} className="text-slate-400 hover:text-slate-200 text-xl p-1 shrink-0 mt-1">✕</button>
@@ -159,8 +156,8 @@ export default function Home({ onNavigate }) {
 {/* Desktop header */}
       <div className="hidden lg:flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-amber-400">Certified Tactical Paramedic (CTAC-P)</h1>
-          <p className="text-slate-400 text-sm mt-1">CTAC-P Exam Prep Portal · ApexCert Publications</p>
+          <h1 className="text-3xl font-bold text-amber-400">ASIS Certified Protection Professional (CPP)</h1>
+          <p className="text-slate-400 text-sm mt-1">CPP Exam Prep Portal · ApexCert Publications</p>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowWelcome(true)} className="text-xs text-slate-500 hover:text-slate-300 border border-slate-700 hover:border-slate-600 px-2.5 py-1.5 rounded-lg transition-colors">? Help</button>
@@ -171,10 +168,10 @@ export default function Home({ onNavigate }) {
       {/* Mobile header */}
       <div className="lg:hidden mb-5">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold text-amber-400">Certified Tactical Paramedic (CTAC-P)</h1>
+          <h1 className="text-2xl font-bold text-amber-400">ASIS CPP Exam Prep</h1>
           <span className="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-full">{FLASHCARDS.length.toLocaleString()} Cards · {questions.length} Qs</span>
         </div>
-        <p className="text-slate-400 text-sm">CTAC-P Exam Prep Portal · ApexCert Publications</p>
+        <p className="text-slate-400 text-sm">CPP Exam Prep Portal · ApexCert Publications</p>
       </div>
 
       {/* Mastery badges */}
@@ -254,7 +251,7 @@ export default function Home({ onNavigate }) {
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
               <ActionBtn icon="🃏" label="Flashcards"    sub="Flip to reveal"   color="amber"   onClick={() => onNavigate('study')} />
               <ActionBtn icon="⏱️" label="Quiz Mode"     sub="Timed MCQ"        color="sky"     onClick={() => onNavigate('quiz')} />
-              <ActionBtn icon="📝" label="Full Exam"     sub="120q · 150 min"   color="rose"    onClick={() => onNavigate('exam')} />
+              <ActionBtn icon="📝" label="Full Exam"     sub="200q · 240 min"   color="rose"    onClick={() => onNavigate('exam')} />
               <ActionBtn icon="📊" label="My Progress"   sub="Stats & analysis" color="emerald" onClick={() => onNavigate('results')} />
               <ActionBtn icon="📹" label="Video Library" sub="Topic videos"     color="violet"  onClick={() => onNavigate('videos')} />
               <ActionBtn icon="📅" label="Study Planner" sub="Plan your week"   color="slate"   onClick={() => onNavigate('planner')} />

@@ -1,5 +1,5 @@
-const AMAZON_URL = 'https://www.amazon.com';
-const NUDGE_KEY = 'ctacp_review_nudge';
+const AMAZON_URL = '';
+const NUDGE_KEY = 'cpp_review_nudge';
 
 function getNudgeState() {
   try {

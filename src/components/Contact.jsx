@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 const FORMSPREE_ID = 'mzdogjjv';
-const PORTAL_PREFIX = '[CTAC-P - ApexCert]';
-const AMAZON_URL = 'https://www.amazon.com';
+const PORTAL_PREFIX = '[ASIS CPP - ApexCert]';
+const AMAZON_URL = '';
 
 export default function Contact({ onNavigate }) {
   const [name, setName] = useState('');

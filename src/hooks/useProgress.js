@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const STORAGE_KEY = 'ctacp_progress';
+const STORAGE_KEY = 'cpp_progress';
 
 const defaultProgress = () => ({
   cardStats: {},
