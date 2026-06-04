@@ -18,25 +18,25 @@ import PasswordGate from './components/PasswordGate';
 
 export default function App() {
   const [screen, setScreen] = useState('home');
-  const [lightMode, setLightMode] = useState(() => localStorage.getItem('ctacp_theme') === 'light');
-  const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem('ctacp_notif_enabled') === '1');
+  const [lightMode, setLightMode] = useState(() => localStorage.getItem('cpp_theme') === 'light');
+  const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem('cpp_notif_enabled') === '1');
 
   async function toggleNotif() {
     if (!('Notification' in window)) return;
     if (notifEnabled) {
-      localStorage.removeItem('ctacp_notif_enabled');
+      localStorage.removeItem('cpp_notif_enabled');
       setNotifEnabled(false);
     } else {
       if (Notification.permission === 'granted') {
-        localStorage.setItem('ctacp_notif_enabled', '1');
+        localStorage.setItem('cpp_notif_enabled', '1');
         setNotifEnabled(true);
-        new Notification('CTAC-P Study Reminder 📚', { body: "Reminders enabled! We'll nudge you if you haven't studied today.", icon: '/favicon.ico' });
+        new Notification('ASIS CPP Study Reminder 📚', { body: "Reminders enabled! We'll nudge you if you haven't studied today.", icon: '/favicon.ico' });
       } else if (Notification.permission === 'default') {
         const perm = await Notification.requestPermission();
         if (perm === 'granted') {
-          localStorage.setItem('ctacp_notif_enabled', '1');
+          localStorage.setItem('cpp_notif_enabled', '1');
           setNotifEnabled(true);
-          new Notification('CTAC-P Study Reminder 📚', { body: "Reminders enabled! We'll nudge you if you haven't studied today.", icon: '/favicon.ico' });
+          new Notification('ASIS CPP Study Reminder 📚', { body: "Reminders enabled! We'll nudge you if you haven't studied today.", icon: '/favicon.ico' });
         }
       } else {
         alert('Notifications are blocked in your browser. Please allow them in your browser settings, then try again.');
@@ -46,19 +46,19 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('light-mode', lightMode);
-    localStorage.setItem('ctacp_theme', lightMode ? 'light' : 'dark');
+    localStorage.setItem('cpp_theme', lightMode ? 'light' : 'dark');
   }, [lightMode]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!('Notification' in window)) return;
-      const raw = localStorage.getItem('ctacp_progress');
+      const raw = localStorage.getItem('cpp_progress');
       const data = raw ? JSON.parse(raw) : {};
       const today = new Date().toDateString();
       const studiedToday = (data.sessionHistory || []).some(s => new Date(s.date).toDateString() === today);
       if (studiedToday) return;
-      if (Notification.permission === 'granted' && localStorage.getItem('ctacp_notif_enabled') === '1') {
-        new Notification('CTAC-P Study Reminder 📚', {
+      if (Notification.permission === 'granted' && localStorage.getItem('cpp_notif_enabled') === '1') {
+        new Notification('ASIS CPP Study Reminder 📚', {
           body: "You haven't studied today yet — keep your streak going!",
           icon: '/favicon.ico'
         });
@@ -68,7 +68,6 @@ export default function App() {
   }, []);
 
   return (
-    <PasswordGate>
     <Layout screen={screen} onNavigate={setScreen} lightMode={lightMode} onToggleTheme={() => setLightMode(m => !m)} notifEnabled={notifEnabled} onToggleNotif={toggleNotif}>
       {screen === 'home'      && <Home onNavigate={setScreen} />}
       {screen === 'study'     && <StudyMode onNavigate={setScreen} />}
@@ -85,6 +84,5 @@ export default function App() {
       {screen === 'contact'   && <Contact onNavigate={setScreen} />}
       {screen === 'exam'      && <ExamMode onNavigate={setScreen} />}
     </Layout>
-    </PasswordGate>
   );
 }

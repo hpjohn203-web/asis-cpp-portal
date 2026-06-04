@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import { VIDEO_LIBRARY } from '../data/videos.js';
 
-function getYouTubeId(url) {
-  const match = url.match(/(?:v=|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : null;
-}
-
 const totalVideos = VIDEO_LIBRARY.reduce((a, g) => a + g.videos.length, 0);
+
+function getVideoKey(url) {
+  return btoa(url).slice(0, 12);
+}
 
 export default function VideoLibrary({ onNavigate }) {
   const [search, setSearch] = useState('');
   const [activeGroup, setActiveGroup] = useState(null);
-  const [activeVideo, setActiveVideo] = useState(null);
-  const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('ctacp_watched_videos') || '{}'));
+  const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('cpp_watched_videos') || '{}'));
 
   function markWatched(url) {
-    const id = getYouTubeId(url);
-    if (!id) return;
-    const next = { ...watched, [id]: true };
+    const key = getVideoKey(url);
+    const next = { ...watched, [key]: true };
     setWatched(next);
-    localStorage.setItem('ctacp_watched_videos', JSON.stringify(next));
+    localStorage.setItem('cpp_watched_videos', JSON.stringify(next));
+  }
+
+  function openVideo(video) {
+    markWatched(video.url);
+    window.open(video.url, '_blank', 'noopener,noreferrer');
   }
 
   const filtered = VIDEO_LIBRARY.map(group => ({
@@ -30,34 +32,7 @@ export default function VideoLibrary({ onNavigate }) {
     ),
   })).filter(g => g.videos.length > 0);
 
-  if (activeVideo) {
-    const vid = getYouTubeId(activeVideo.url);
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-4 lg:py-8">
-        <button onClick={() => setActiveVideo(null)} className="flex items-center gap-2 text-slate-400 hover:text-slate-200 mb-4 text-sm">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Library
-        </button>
-        <div className="relative w-full rounded-2xl overflow-hidden" style={{ paddingBottom: '56.25%' }}>
-          <iframe
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`}
-            title={activeVideo.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        <div className="mt-4 bg-slate-800 rounded-2xl p-4">
-          <h2 className="font-semibold mb-2">{activeVideo.title}</h2>
-          <a href={activeVideo.url} target="_blank" rel="noreferrer" className="text-xs text-amber-400 hover:underline">
-            Open on YouTube ↗
-          </a>
-        </div>
-      </div>
-    );
-  }
+  const watchedCount = Object.keys(watched).length;
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8 max-w-5xl mx-auto">
@@ -68,11 +43,11 @@ export default function VideoLibrary({ onNavigate }) {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-xl lg:text-2xl font-bold">Video Library</h1>
-          <p className="text-sm text-slate-400 mt-0.5">{totalVideos} videos · <span className="text-emerald-400">{Object.keys(watched).length} watched</span></p>
+          <p className="text-sm text-slate-400 mt-0.5">{totalVideos} videos · <span className="text-emerald-400">{watchedCount} watched</span></p>
         </div>
+        <p className="text-xs text-slate-500 hidden lg:block">Opens on YouTube ↗</p>
       </div>
 
-      {/* Search */}
       <div className="relative mb-4">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
         <input
@@ -87,7 +62,6 @@ export default function VideoLibrary({ onNavigate }) {
         )}
       </div>
 
-      {/* Group chips */}
       <div className="flex gap-2 pb-3 mb-5 overflow-x-auto scrollbar-hide">
         <button onClick={() => setActiveGroup(null)}
           className={`shrink-0 text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${!activeGroup ? 'bg-amber-500 text-slate-900' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
@@ -101,7 +75,6 @@ export default function VideoLibrary({ onNavigate }) {
         ))}
       </div>
 
-      {/* Video grid */}
       <div className="space-y-8">
         {filtered
           .filter(g => !activeGroup || g.group === activeGroup)
@@ -110,23 +83,26 @@ export default function VideoLibrary({ onNavigate }) {
               <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{group.group} <span className="text-slate-600">({group.videos.length})</span></h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                 {group.videos.map(video => {
-                  const vid = getYouTubeId(video.url);
-                  const isWatched = vid && watched[vid];
+                  const key = getVideoKey(video.url);
+                  const isWatched = !!watched[key];
                   return (
-                    <button key={video.url} onClick={() => { setActiveVideo(video); markWatched(video.url); }}
-                      className={`flex items-center gap-3 border rounded-2xl p-3 text-left transition-colors active:scale-[0.98] group ${isWatched ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500/50' : 'bg-slate-800 border-slate-700 hover:border-amber-500/40'}`}>
-                      <div className="relative shrink-0 w-20 h-12 rounded-lg overflow-hidden bg-slate-700">
-                        {vid && <img src={`https://img.youtube.com/vi/${vid}/mqdefault.jpg`} alt="" className="w-full h-full object-cover" />}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <button
+                      key={video.url}
+                      onClick={() => openVideo(video)}
+                      className={`flex items-center gap-3 border rounded-2xl p-3 text-left transition-colors active:scale-[0.98] group ${isWatched ? 'bg-emerald-500/5 border-emerald-500/30 hover:border-emerald-500/50' : 'bg-slate-800 border-slate-700 hover:border-amber-500/40'}`}
+                    >
+                      <div className="relative shrink-0 w-20 h-12 rounded-lg overflow-hidden bg-slate-700 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center">
                           {isWatched
-                            ? <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center"><span className="text-white text-xs font-bold">✓</span></div>
-                            : <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center"><svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div>
+                            ? <div className="w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center"><span className="text-white text-sm font-bold">✓</span></div>
+                            : <div className="w-7 h-7 bg-red-600 rounded-full flex items-center justify-center"><svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div>
                           }
                         </div>
+                        <span className="text-slate-600 text-xs absolute bottom-1 right-1.5">▶ YT</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm font-medium line-clamp-2 transition-colors ${isWatched ? 'text-slate-400' : 'text-slate-200 group-hover:text-amber-300'}`}>{video.title}</p>
-                        <p className={`text-xs mt-0.5 ${isWatched ? 'text-emerald-400' : 'text-amber-400'}`}>{isWatched ? '✓ Watched' : '▶ Watch now'}</p>
+                        <p className={`text-xs mt-0.5 ${isWatched ? 'text-emerald-400' : 'text-amber-400'}`}>{isWatched ? '✓ Watched' : '▶ Open on YouTube'}</p>
                       </div>
                     </button>
                   );
