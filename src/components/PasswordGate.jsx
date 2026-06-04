@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const PORTAL_PASSWORD = 'apexcert-cpp-z;N&!h;Y?Uxqp*Ip';
+const PORTAL_PASSWORD = ''; // customer password — set before publishing book
 const CREATOR_PASSWORD = 'hpJOHN2003.';
 const STORAGE_KEY = 'cpp_unlocked';
 
@@ -14,7 +14,7 @@ export default function PasswordGate({ children }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (input.trim() === PORTAL_PASSWORD || input.trim() === CREATOR_PASSWORD) {
+    if ((PORTAL_PASSWORD && input.trim() === PORTAL_PASSWORD) || input.trim() === CREATOR_PASSWORD) {
       localStorage.setItem(STORAGE_KEY, '1');
       setUnlocked(true);
     } else {
